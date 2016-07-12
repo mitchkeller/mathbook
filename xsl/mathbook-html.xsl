@@ -4298,6 +4298,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <b><i><xsl:apply-templates /></i></b>
 </xsl:template>
 
+<!-- CSS for ins, del, s -->
+<!-- http://html5doctor.com/ins-del-s/           -->
+<!-- http://stackoverflow.com/questions/2539207/ -->
+
+<!-- Insert (an edit) -->
+<xsl:template match="insert">
+    <xsl:element name="ins">
+        <xsl:attribute name="class">
+            <xsl:text>insert</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Delete (an edit) -->
+<xsl:template match="delete">
+    <xsl:element name="del">
+        <xsl:attribute name="class">
+            <xsl:text>delete</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
+<!-- Stale (no longer relevant) -->
+<xsl:template match="stale">
+    <xsl:element name="s">
+        <xsl:attribute name="class">
+            <xsl:text>stale</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates />
+    </xsl:element>
+</xsl:template>
+
 <!-- Copyright symbol -->
 <xsl:template match="copyright">
     <xsl:text>&#169;</xsl:text>
@@ -4314,6 +4348,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2122;</xsl:text>
 </xsl:template>
 
+
+<!-- Fill-in blank -->
+<!-- Bringhurst suggests 5/11 em per character -->
+<xsl:template match="fillin">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="@characters">
+                <xsl:value-of select="@characters" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="span">
+        <xsl:attribute name="class">
+            <xsl:text>fillin</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="5 * $characters div 11" />
+            <xsl:text>em;</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
 
 <!-- exempli gratia, for example -->
 <xsl:template match="eg">
@@ -6073,9 +6132,11 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 <!-- Font header -->
 <!-- Google Fonts -->
 <!-- Text: Open Sans by default (was: Istok Web font, regular and italic (400), bold (700)) -->
-<!-- Code: Source Code Pro, regular (400) -->
+<!-- Code: Inconsolata, regular (400), bold (700) (was: Source Code Pro regular (400))      -->
+<!-- (SourceCodePro being removed) -->
 <xsl:template name="fonts">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic|Source+Code+Pro:400' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 </xsl:template>
 
 <!-- CSS header -->

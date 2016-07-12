@@ -38,8 +38,8 @@
 <!-- For example, an <ndash>, but not a <me>             -->
 <!-- Precede these by a #PCDATA, wrap with ( )*          -->
 <!ENTITY % characters "nbsp|ndash|mdash|ampersand|less|greater|hash|dollar|percent|circumflex|underscore|lbrace|rbrace|
-lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|today|timeofday">
-<!ENTITY % markup "xref|url|m|c|em|alert|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
+lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk|lq|rq|lsq|rsq|ellipsis|midpoint|swungdash|permille|pilcrow|section-mark|dimension|slash|solidus|copyright|ie|eg|etc|circa|tex|latex|webwork|trademark|registered|fillin|today|timeofday">
+<!ENTITY % markup "xref|url|m|c|em|alert|insert|delete|stale|q|sq|braces|brackets|angles|term|foreign|quantity|acro|booktitle">
 <!ENTITY % linear "%characters; | %markup;">
 
 <!-- Multiline Content -->
@@ -74,8 +74,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
 <!-- REMARK-LIKE remark|convention|note|observation|warning                         -->
 <!-- EXAMPLE-LIKE example|question|problem                                          -->
-<!-- PROJECT-LIKE project|activity|exploration|task                                 -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!-- PROJECT-LIKE project|activity|exploration|task|investigation                   -->
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|investigation|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -242,6 +242,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST exploration xml:id ID #IMPLIED>
 <!ELEMENT task (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST task xml:id ID #IMPLIED>
+<!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution)))>
+    <!ATTLIST investigation xml:id ID #IMPLIED>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>
@@ -437,6 +439,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- see webwork possibly EMPTY in larger definition -->
 <!ELEMENT trademark   EMPTY>
 <!ELEMENT registered  EMPTY>
+<!ELEMENT fillin  EMPTY>
+    <!ATTLIST fillin characters CDATA #IMPLIED>
 <!ELEMENT today       EMPTY>
 <!ELEMENT timeofday   EMPTY>
 
@@ -446,6 +450,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!ELEMENT em           (#PCDATA|%linear;)*>
 <!ELEMENT alert        (#PCDATA|%linear;)*>
+<!ELEMENT insert       (#PCDATA|%linear;)*>
+<!ELEMENT delete       (#PCDATA|%linear;)*>
+<!ELEMENT stale        (#PCDATA|%linear;)*>
 <!ELEMENT q            (#PCDATA|%linear;)*>
 <!ELEMENT sq           (#PCDATA|%linear;)*>
 <!ELEMENT braces       (#PCDATA|%linear;)*>

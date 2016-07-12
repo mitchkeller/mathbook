@@ -351,11 +351,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% For unicode character support, use the "xelatex" executable&#xa;</xsl:text>
-    <xsl:text>%% If never using xelatex, the next three lines can be removed&#xa;</xsl:text>
+    <xsl:text>%% This LaTeX file may be compiled with pdflatex or xelatex&#xa;</xsl:text>
+    <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
+    <xsl:text>%% Generally, xelatex will do better languages other than US English&#xa;</xsl:text>
+    <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
-    <!-- latex ifthen package, with \boolean{xetex} is option -->
-    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
+    <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <!-- TODO: put a xelatex font package hook here? -->
+    <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
+    <xsl:text>%% Also, fontenc with T1 makes CM-Super the default font&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/88368/how-do-i-invoke-cm-super -->
+    <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition (broken?)&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+    <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
+    <!-- TODO: put a pdflatex font package hook here? -->
+    <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
+    <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+    <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
+    <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
+    <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
+    <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
+    <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
+    <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
+    <xsl:text>%% xelatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+    <xsl:text>%% xelatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
+    <xsl:text>%% xelatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
+    <xsl:text>%% &#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
+    <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
+    <!-- TODO: put a xelatex monospace font package hook here? -->
+    <xsl:text>%% end: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
+     <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
+    <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
+    <!-- TODO: put a pdflatex monospace font package hook here? -->
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
@@ -376,6 +420,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="/mathbook//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
+    <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
+    <xsl:if test="/mathbook//insert or /mathbook//delete or /mathbook//stale">
+        <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
+        <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
+        <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
+        <xsl:text>%% Rules in this package reset proportional to fontsize&#xa;</xsl:text>
+        <xsl:text>%% NB: *never* reset to package default (0.4pt?) after use&#xa;</xsl:text>
+        <xsl:text>%% Macros will use colors if  latex.print='no'  (the default)&#xa;</xsl:text>
+        <xsl:if test="/mathbook//insert">
+            <xsl:text>%% Used for an edit that is an addition&#xa;</xsl:text>
+            <xsl:text>\newcommand{\insertthick}{.1ex}&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$latex.print='yes'">
+                    <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\uline{#1}}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\newcommand{\inserted}[1]{\renewcommand{\ULthickness}{\insertthick}\textcolor{green}{\uline{#1}}}&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <xsl:if test="/mathbook//delete">
+            <xsl:text>%% Used for an edit that is a deletion&#xa;</xsl:text>
+            <xsl:text>\newcommand{\deletethick}{.25ex}&#xa;</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$latex.print='yes'">
+                    <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\sout{#1}}&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\newcommand{\deleted}[1]{\renewcommand{\ULthickness}{\deletethick}\textcolor{red}{\sout{#1}}}&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <xsl:if test="/mathbook//stale">
+            <xsl:text>%% Used for inline irrelevant or obsolete text&#xa;</xsl:text>
+            <xsl:text>\newcommand{\stalethick}{.1ex}&#xa;</xsl:text>
+            <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="/mathbook//fillin">
+        <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
+        <xsl:text>%% Argument is length in em&#xa;</xsl:text>
+        <xsl:text>\newcommand{\fillin}[1]{\rule{#1em}{0.1ex}}&#xa;</xsl:text>
     </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
@@ -601,7 +689,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- PROJECT-LIKE blocks -->
-    <xsl:if test="//project or //activity or //exploration or //task">
+    <xsl:if test="//project or //activity or //exploration or //task or //investigation">
         <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
@@ -633,6 +721,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//task">
             <xsl:text>\newtheorem{task}[project]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'task'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//investigation">
+            <xsl:text>\newtheorem{investigation}[project]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'investigation'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -871,9 +964,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
+        <!-- Listings do not float yet have semantic captions -->
+        <!-- New environment, new captiontype: -->
+        <!-- http://tex.stackexchange.com/questions/7210/label-and-caption-without-float -->
+        <!-- Within numbering argument: -->
+        <!-- http://tex.stackexchange.com/questions/115193/continuous-numbering-of-custom-float-with-caption-package -->
+        <!-- Caption formatting/style possibilities: -->
+        <!-- http://tex.stackexchange.com/questions/117531/styling-a-lstlisting-caption-using-caption-package -->
         <xsl:if test="//listing">
-            <xsl:text>% Listing environment declared as new floating environment&#xa;</xsl:text>
-            <xsl:text>\DeclareFloatingEnvironment[fileext=lol,placement={H},within=</xsl:text>
+            <xsl:text>% Listing environment declared as new environment&#xa;</xsl:text>
+            <xsl:text>\newenvironment{listing}{}{}&#xa;</xsl:text>
+            <xsl:text>% New caption type for numbering, style, etc.&#xa;</xsl:text>
+            <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
             <xsl:choose>
                 <xsl:when test="$numbering-theorems = 0">
@@ -885,12 +987,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'listing'" /></xsl:call-template>
-            <xsl:text>]{listing}&#xa;</xsl:text>
-            <xsl:text>% listings have the same number as theorems: http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
+            <xsl:text>]{listingcaption}[</xsl:text>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'listing'" />
+            </xsl:call-template>
+            <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>\captionsetup[listingcaption]{aboveskip=0.5ex,belowskip=\baselineskip}&#xa;</xsl:text>
+            <xsl:text>%% listings have the same number as theorems:&#xa;</xsl:text>
+            <xsl:text>%% http://tex.stackexchange.com/questions/16195/how-to-make-equations-figures-and-theorems-use-the-same-numbering-scheme &#xa;</xsl:text>
             <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:text>\let\c@listing\c@theorem&#xa;</xsl:text>
+            <xsl:text>\let\c@listingcaption\c@theorem&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -921,7 +1027,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%% Raster graphics inclusion, wrapped figures in paragraphs&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
-    <xsl:text>%% Colors for Sage boxes and author tools (red hilites)&#xa;</xsl:text>
+    <!-- Color support automatically, could be conditional -->
+    <xsl:text>%% Colors for Sage boxes, author tools (red hilites), red/green edits&#xa;</xsl:text>
     <xsl:text>\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}&#xa;</xsl:text>
     <!-- Inconsolata font, sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html            -->
     <!-- As seen on: http://tex.stackexchange.com/questions/50810/good-monospace-font-for-code-in-latex -->
@@ -932,13 +1039,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-    <xsl:if test="//c or //pre or //sage or //program or //console">
+<!-- <xsl:if test="//c or //pre or //sage or //program or //console">
         <xsl:text>%% New typewriter font if  c, sage, program, console, pre  tags present&#xa;</xsl:text>
         <xsl:text>%% If only  email, url  tags, no change from default&#xa;</xsl:text>
-        <xsl:text>%% Needs a bit of scaling down to match text&#xa;</xsl:text>
-        <xsl:text>\usepackage[scaled=.95]{sourcecodepro}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="//c or //sage or //program">
+        <xsl:text>%% TODO: move this XSL conditional above&#xa;</xsl:text>
+    </xsl:if> -->
+     <xsl:if test="//c or //sage or //program">
         <xsl:text>%% Program listing support, for inline code, Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
@@ -999,6 +1105,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- perhaps use fancyverb more widely -->
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:text>\DefineVerbatimEnvironment{console}{Verbatim}%&#xa;</xsl:text>
+        <!-- numbers=left, stepnumber=5 trivial (can mimic in HTML with counting recursive routine) -->
         <xsl:text>{fontsize=\small,commandchars=</xsl:text>
         <xsl:variable name="latex-escaped" select="'&amp;%$#_{}~^\@'" />
         <xsl:if test="contains($latex-escaped, $console-macro)">
@@ -1131,14 +1238,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
         <xsl:text>\usepackage[letter,cam,center,pdflatex]{crop}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- upquote package should come as late as possible -->
-    <!-- we fix minus signs in listings package above    -->
-    <xsl:if test="//c or //pre or //program or //sage"> <!-- verbatim elements (others?) -->
-        <xsl:text>%% Use upright quotes rather than LaTeX's curly quotes&#xa;</xsl:text>
-        <xsl:text>%% If custom font substitutions follow, this might be ineffective&#xa;</xsl:text>
-        <xsl:text>%% If fonts lack upright quotes, the textcomp package is employed&#xa;</xsl:text>
-        <xsl:text>\usepackage{upquote}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="/mathbook/docinfo/latex-image-preamble">
         <xsl:text>%% Graphics Preamble Entries&#xa;</xsl:text>
@@ -3340,6 +3439,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- Insert (an edit) -->
+<!-- \inserted{} defined in preamble as semantic macro -->
+<xsl:template match="insert">
+    <xsl:text>\inserted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Delete (an edit) -->
+<!-- \deleted{} defined in preamble as semantic macro -->
+<xsl:template match="delete">
+    <xsl:text>\deleted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Stale (no longer relevant) -->
+<!-- \stale{} defined in preamble as semantic macro -->
+<xsl:template match="stale">
+    <xsl:text>\stale{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Term (defined terms) -->
 <!-- \terminology{} defined in preamble as semantic macro -->
 <xsl:template match="term">
@@ -3804,6 +3927,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\texttrademark{}</xsl:text>
 </xsl:template>
 
+<!-- Fill-in blank -->
+<!-- \fillin{} defined in preamble as semantic macro      -->
+<!-- argument is number of "em", Bringhurst suggests 5/11 -->
+<xsl:template match="fillin">
+    <xsl:variable name="characters">
+        <xsl:choose>
+            <xsl:when test="@characters">
+                <xsl:value-of select="@characters" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>10</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\fillin{</xsl:text>
+    <xsl:value-of select="5 * $characters div 11" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
 <xsl:template match="imply">
@@ -3974,6 +4116,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>, language=</xsl:text>
         <xsl:value-of select="$language" />
     </xsl:if>
+    <!-- lstlisting can be captioned: captionpos, title (hard-coded) -->
     <xsl:text>]&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
@@ -4012,22 +4155,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- newline after environment is necessary -->
     <!-- Assumes prompt does not exceed one line -->
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
-    <!-- We substitute for the escape characters,    -->
-    <!-- either within this input element, or within -->
-    <!-- this console elemnet or document-wide       -->
-    <!-- consoleinput macro defined in preamble      -->
-    <xsl:value-of select="$console-macro" />
-    <xsl:text>consoleinput</xsl:text>
-    <xsl:value-of select="$console-begin" />
-    <xsl:apply-templates />
-    <xsl:value-of select="$console-end" />
-    <xsl:text>&#xa;</xsl:text>
+    <!-- sanitize left-margin, etc                    -->
+    <!-- then employ \consoleinput macro on each line -->
+    <xsl:call-template name="wrap-console-input">
+        <xsl:with-param name="text">
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
-<!-- Output code gets massaged to remove a left margin, leading blank lines, etc. -->
+<!-- We substitute for the escape characters,    -->
+<!-- consoleinput macro defined in preamble      -->
+<xsl:template name="wrap-console-input">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="$text=''" />
+        <xsl:otherwise>
+            <xsl:value-of select="$console-macro" />
+            <xsl:text>consoleinput</xsl:text>
+            <xsl:value-of select="$console-begin" />
+            <xsl:value-of select="substring-before($text, '&#xa;')" />
+            <xsl:value-of select="$console-end" />
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="wrap-console-input">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Output code gets massaged to remove a left margin, -->
+<!-- leading blank lines, etc.                          -->
 <xsl:template match="console/output">
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="." />
@@ -4094,13 +4256,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Listings -->
-<!-- Standard LaTeX figure environment redefined, see preamble comments -->
+<!-- Simple non-float environment            -->
+<!-- \captionof for numbering, style, etc    -->
+<!-- not centering the interior environments -->
+<!-- since it is not straightforward, maybe  -->
+<!-- requires a savebox and a minipage       -->
 <xsl:template match="listing">
     <xsl:apply-templates select="." mode="leave-vertical-mode" />
     <xsl:text>\begin{listing}&#xa;</xsl:text>
-    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
-    <xsl:apply-templates select="caption" />
+    <xsl:text>\par&#xa;</xsl:text>
+    <xsl:text>\captionof{listingcaption}{</xsl:text>
+    <xsl:apply-templates select="caption/text()|caption/*" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 

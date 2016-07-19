@@ -81,6 +81,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
     <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
     <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
+    <!-- <localization string-id='insight'><xsl:text>Insight</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemple</xsl:text></localization> <!--checked-->
     <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
@@ -92,6 +93,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
     <!-- <localization string-id='investigation'><xsl:text>Investigation</xsl:text></localization> -->
     <!--  -->
+    <!-- assemblages are collections of minimally structured material -->
+    <!-- <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization> -->
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Note de bas de page</xsl:text></localization> <!--checked-->

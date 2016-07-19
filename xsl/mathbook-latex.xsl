@@ -637,7 +637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- REMARK-LIKE blocks, environments -->
-    <xsl:if test="//remark or //convention or //note or //observation or //warning">
+    <xsl:if test="//remark or //convention or //note or //observation or //warning or //insight">
         <xsl:text>%% Remark-like environments, normal text&#xa;</xsl:text>
         <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
@@ -664,6 +664,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//warning">
             <xsl:text>\newtheorem{warning}[theorem]{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'warning'" /></xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="//insight">
+            <xsl:text>\newtheorem{insight}[theorem]{</xsl:text>
+            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'insight'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
@@ -728,6 +733,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'investigation'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <xsl:if test="//assemblage">
+        <xsl:text>%% assemblage: minimally structured content, high visibility presentation&#xa;</xsl:text>
+        <xsl:text>%% Package for breakable highlight boxes&#xa;</xsl:text>
+        <!-- TODO: load just once, see webwork -->
+        <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
+        <xsl:text>%% assemblage style&#xa;</xsl:text>
+        <xsl:text>\mdfdefinestyle{assemblage}{framemethod=default,linewidth=2pt,roundcorner=16pt,backgroundcolor=black!05}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="//exercise or //list">
@@ -2839,6 +2852,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- An assemblage is low-structure content, high-visibility presentation -->
+<xsl:template match="assemblage">
+    <xsl:text>\begin{mdframed}[style=assemblage]%&#xa;</xsl:text>
+    <xsl:text>\noindent\textbf{\large </xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>\par\medskip&#xa;</xsl:text>
+    <xsl:apply-templates select="p" />
+    <xsl:text>\end{mdframed}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- An example might have a statement/solution structure -->
 <xsl:template match="solution[parent::*[&EXAMPLE-FILTER; or &PROJECT-FILTER;]]">
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
@@ -2947,7 +2972,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()" />
+            <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
@@ -2964,7 +2989,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="." />
+    <xsl:apply-templates select="text()|fillin" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -2998,7 +3023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref" />
+            <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -3019,7 +3044,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|xref|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()|xref" />
+            <xsl:apply-templates select="text()|xref|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -3928,8 +3953,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Fill-in blank -->
-<!-- \fillin{} defined in preamble as semantic macro      -->
-<!-- argument is number of "em", Bringhurst suggests 5/11 -->
+<!-- \fillin{} defined in preamble as semantic macro       -->
+<!-- argument is number of "em", Bringhurst suggests 5/11  -->
+<!-- \rule works in text and in math (unlike HTML/MathJax) -->
 <xsl:template match="fillin">
     <xsl:variable name="characters">
         <xsl:choose>

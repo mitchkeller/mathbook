@@ -72,10 +72,10 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- DEFINITION-LIKE definition                                                     -->
 <!-- THEOREM-LIKE theorem|corollary|lemma|algorithm|proposition|claim|fact|identity -->
 <!-- AXIOM-LIKE   axiom|conjecture|principle|heuristic|hypothesis|assumption        -->
-<!-- REMARK-LIKE remark|convention|note|observation|warning                         -->
+<!-- REMARK-LIKE remark|convention|note|observation|warning|insight                 -->
 <!-- EXAMPLE-LIKE example|question|problem                                          -->
 <!-- PROJECT-LIKE project|activity|exploration|task|investigation                   -->
-<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|list|example|question|problem|project|activity|exploration|task|investigation|exercise|contributors|list-of|solution-list|notation-list|todo">
+<!ENTITY % block "%para;|paragraphs|definition|theorem|corollary|lemma|algorithm|proposition|claim|fact|identity|axiom|conjecture|principle|heuristic|hypothesis|assumption|remark|convention|note|observation|warning|insight|list|example|question|problem|project|activity|exploration|task|investigation|assemblage|exercise|contributors|list-of|solution-list|notation-list|todo">
 
 
 <!-- ######### -->
@@ -225,6 +225,8 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST observation xml:id ID #IMPLIED>
 <!ELEMENT warning (title?, index*, (%para;)*)>
     <!ATTLIST warning xml:id ID #IMPLIED>
+<!ELEMENT insight (title?, index*, (%para;)*)>
+    <!ATTLIST insight xml:id ID #IMPLIED>
 
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 <!-- minimal structure  xor  statement/solution -->
@@ -244,6 +246,9 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
     <!ATTLIST task xml:id ID #IMPLIED>
 <!ELEMENT investigation (title?, index*, ((%para;)*|(statement, solution)))>
     <!ATTLIST investigation xml:id ID #IMPLIED>
+
+<!-- a collection or summary, minimal structure, highlighted presentation -->
+<!ELEMENT assemblage (title?, index*, p+)>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>
@@ -527,16 +532,16 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- var is allowed only within a webwork problem         -->
 <!-- xref is allowed only on mrows to allow for "reasons" -->
 <!-- TODO: warn on use of var outside of webwork          -->
-<!ELEMENT m   (#PCDATA|var)*>
-<!ELEMENT me  (#PCDATA|var)*>
-<!ELEMENT men (#PCDATA|var)*>
+<!ELEMENT m   (#PCDATA|var|fillin)*>
+<!ELEMENT me  (#PCDATA|var|fillin)*>
+<!ELEMENT men (#PCDATA|var|fillin)*>
     <!ATTLIST men xml:id ID #IMPLIED>
 
 <!ELEMENT md   (mrow, (mrow|intertext)*)>
 <!ELEMENT mdn  (mrow, (mrow|intertext)*)>
 
 <!-- <xref> may occur in an <mrow> as a "reason" -->
-<!ELEMENT mrow (#PCDATA|var|xref)*>
+<!ELEMENT mrow (#PCDATA|var|xref|fillin)*>
     <!ATTLIST mrow xml:id ID #IMPLIED>
     <!ATTLIST mrow number (yes|no) #IMPLIED>
 

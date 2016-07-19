@@ -182,9 +182,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in AXIOM-LIKE entity                  -->
 <!-- axiom|conjecture|principle|heuristic|hypothesis|assumption -->
 <xsl:strip-space elements="axiom conjecture principle heuristic hypothesis assumption" />
-<!-- List is elements in REMARK-LIKE entity -->
-<!-- example|question|problem                -->
-<xsl:strip-space elements="remark convention note observation warning" />
+<!-- List is elements in REMARK-LIKE entity             -->
+<!-- remark|convention|note|observation|warning|insight -->
+<xsl:strip-space elements="remark convention note observation warning insight" />
 <!-- List is elements in EXAMPLE-LIKE entity -->
 <!-- example|question|problem                -->
 <xsl:strip-space elements="example question problem" />
@@ -555,7 +555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="text()|var" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="text()" />
+            <xsl:apply-templates select="text()|fillin" />
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\)</xsl:text>
@@ -1958,7 +1958,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Empty string signifies not numbered -->
 <!-- We do provide a "xref number" of an -->
 <!-- exercisegroup, but otherwise not    -->
-<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|p" mode="serial-number" />
+<xsl:template match="book|article|letter|memo|introduction|conclusion|paragraphs|paragraph|frontmatter|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|colophon|backmatter|exercisegroup|p|assemblage" mode="serial-number" />
 
 <!-- If a list item has any ancestor that is not  -->
 <!-- an ordered list, then it gets no number      -->

@@ -1213,7 +1213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "posterior-duplicate"  no ID, no \label         -->
 
 <!-- me is absent, not numbered, never knowled -->
-<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;" mode="xref-knowl">
+<xsl:template match="fn|biblio|men|md|mdn|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;" mode="xref-knowl">
     <!-- write a file, calling body and posterior duplicate templates -->
     <xsl:variable name="knowl-file">
         <xsl:apply-templates select="." mode="xref-knowl-filename" />
@@ -1381,6 +1381,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Title only, eg on an assemblage -->
+<xsl:template match="*" mode="heading-title">
+    <xsl:element name="h5">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:element>
+</xsl:template>
+
 <!-- eg "Solution 5" as text of knowl-clickable, no wrapping -->
 <xsl:template match="*" mode="heading-simple">
     <xsl:apply-templates select="." mode="type-name" />
@@ -1408,7 +1418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not come through here at all, since they are   -->
 <!-- always visible with no decoration, so plain       -->
 <!-- default templates are good enough                 -->
-<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;">
+<xsl:template match="fn|biblio|p|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|assemblage|solution[not(ancestor::*[webwork])]|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;">
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
     </xsl:variable>
@@ -2274,6 +2284,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- Assemblage -->
+<!-- Runs of paragraphs only -->
+<xsl:template match="assemblage" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<xsl:template match="assemblage" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<xsl:template match="assemblage" mode="body-css-class">
+    <xsl:text>assemblage-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="assemblage" mode="birth-element">
+    <xsl:text>div</xsl:text>
+</xsl:template>
+
+<xsl:template match="assemblage" mode="hidden-knowl-element" />
+
+<xsl:template match="assemblage" mode="hidden-knowl-css-class" />
+
+<xsl:template match="assemblage" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
+
+<xsl:template match="assemblage" mode="body">
+    <xsl:apply-templates select="p" />
+</xsl:template>
+
+<xsl:template match="assemblage" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
+
+<xsl:template match="assemblage" mode="body-duplicate">
+    <xsl:apply-templates select="p" mode="duplicate" />
+</xsl:template>
+
+<xsl:template match="assemblage" mode="has-posterior">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
 <!-- Solutions (to examples, projects) -->
 <!-- EXAMPLE-LIKE, PROJECT-LIKE -->
 
@@ -2956,7 +3008,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
@@ -2969,7 +3021,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <!-- label original -->
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates select="." mode="tag" />
@@ -2982,7 +3034,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
     <xsl:text>}</xsl:text>
-    <xsl:value-of select="text()|var" />
+    <xsl:apply-templates select="text()|var|fillin" />
     <xsl:apply-templates select="." mode="tag" />
     <xsl:text>\end{</xsl:text>
     <xsl:apply-templates select="." mode="displaymath-alignment" />
@@ -3021,7 +3073,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (3) MathJax config makes span id's predictable    -->
 <!-- (4) Last row special, has no line-break marker    -->
 <xsl:template match="md/mrow">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="@number='yes'">
         <!-- label original -->
         <xsl:apply-templates select="." mode="label" />
@@ -3034,7 +3086,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="md/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:if test="@number='yes'">
         <xsl:apply-templates select="." mode="tag"/>
     </xsl:if>
@@ -3045,7 +3097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -3063,7 +3115,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mdn/mrow" mode="duplicate">
-    <xsl:apply-templates select="text()|xref|var" />
+    <xsl:apply-templates select="text()|xref|var|fillin" />
     <xsl:choose>
         <xsl:when test="@number='no'">
             <xsl:text>\notag</xsl:text>
@@ -4012,7 +4064,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a sidebyside even though this is not necessary           -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|&THEOREM-LIKE;|proof|&AXIOM-LIKE;|&REMARK-LIKE;|assemblage|exercise|hint|answer|solution|exercisegroup|figure|table|listing|sidebyside|sidebyside/figure|sidebyside/table|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -4348,9 +4400,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2122;</xsl:text>
 </xsl:template>
 
-
 <!-- Fill-in blank -->
-<!-- Bringhurst suggests 5/11 em per character -->
+<!-- Bringhurst suggests 5/11 em per character                            -->
+<!-- A 'span' normally, but a MathJax non-standard \Rule for math         -->
+<!-- "\Rule is a MathJax-specific extension with parameters being width,  -->
+<!-- height and depth of the rule"                                        -->
+<!-- Davide Cervone                                                       -->
+<!-- https://groups.google.com/forum/#!topic/mathjax-users/IEivs1D7ntM    -->
 <xsl:template match="fillin">
     <xsl:variable name="characters">
         <xsl:choose>
@@ -4362,16 +4418,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:element name="span">
-        <xsl:attribute name="class">
-            <xsl:text>fillin</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>width: </xsl:text>
+    <xsl:choose>
+        <xsl:when test="parent::m or parent::me or parent::men or parent::mrow">
+            <xsl:text>\Rule{</xsl:text>
             <xsl:value-of select="5 * $characters div 11" />
-            <xsl:text>em;</xsl:text>
-        </xsl:attribute>
-    </xsl:element>
+            <xsl:text>em}{0.1ex}{0pt}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:element name="span">
+                <xsl:attribute name="class">
+                    <xsl:text>fillin</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="5 * $characters div 11" />
+                    <xsl:text>em;</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- exempli gratia, for example -->

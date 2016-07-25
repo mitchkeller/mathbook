@@ -70,6 +70,7 @@ the xsltproc executable.
         -->
         <macros>
         \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
+        \newcommand{\myequation}[2]{#1\amp =#2} % testing alignment override
         % comments anywhere get stripped, with or without faux % comment \% characters
         \newcommand{\indefiniteintegral}[2]{\int#1\,d#2}
         \newcommand{\testingescapedpercent}{ \% } % just testing
@@ -241,9 +242,9 @@ the xsltproc executable.
             -->
             <theorem xml:id="theorem-FTC">
                 <title>The Fundamental Theorem of Calculus</title>
-                <index>Fundamental Theorem of Calculus</index>
+                <index><main>Fundamental Theorem of Calculus</main></index>
                 <statement>
-                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index>Buried in p/statement/theorem</index></p>
+                    <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><index><main>Buried in p/statement/theorem</main></index></p>
                 </statement>
                 <proof>
                     <p>Left to the reader.</p>
@@ -285,13 +286,13 @@ the xsltproc executable.
             -->
 
             <definition xml:id="definition-indefinite-integral">
-                <statement>
-                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
-                </statement>
                 <notation>
                     <usage>\int\,f(x)\,dx</usage>
                     <description>indefinite integral of <m>f(x)</m></description>
                 </notation>
+                <statement>
+                    <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me></p>
+                </statement>
             </definition>
 
         </section>
@@ -664,13 +665,22 @@ the xsltproc executable.
                 <assemblage xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
-                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>), which by extension can contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  But its presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.</p>
+                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs (<c>p</c>), tables, figures and side-by-sides.  The intent is that these do not have captions, so are not numbered, so cannot be cross-referenced and so do not become knowls (inside of the knowled assemblage).  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.</p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
                         <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" autoname="yes" />)</p></li>
                         <li><p>Sage cells, including with R. (<xref ref="section-sage-cells" autoname="yes" />)</p></li>
                         <li><p>Lots of document structure, like introductions and conclusions (next). (<xref ref="interesting-corollary" autoname="yes" />)</p></li>
                     </ul></p>
+
+                    <p>A sample table, with no caption, follows.</p>
+
+                    <table>
+                        <tabular>
+                            <row><cell>A</cell><cell>B</cell><cell>C</cell></row>
+                            <row><cell>Uno</cell><cell>Dos</cell><cell>Tres</cell></row>
+                        </tabular>
+                    </table>
                 </assemblage>
             </subsection>
 
@@ -796,10 +806,10 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<index>Strange Colors</index></p></li>
+                <li><p>Salmon<index><main>Strange Colors</main></index></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
-                <li><p>Puce<index>Strange Colors</index></p></li>
+                <li><p>Puce<index><main>Strange Colors</main></index></p></li>
             </ol>
 
             <ul cols="2">
@@ -912,32 +922,76 @@ the xsltproc executable.
         <section>
             <title>Mathematics</title>
 
-            <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+            <introduction>
+                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+            </introduction>
 
-            <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
-                <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
-                <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
-                <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
-                <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
-            </md></p>
+            <subsection>
+                <title>Basic Mathematics</title>
 
-            <notation>
-                <usage>\nabla</usage>
-                <description>gradient operator</description>
-            </notation>
+                <p>The following is from the MathJax <url href="http://www.mathjax.org/demos/tex-samples/">demonstration page</url>, an identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me></p>
 
-            <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
+                <p>And again, from the MathJax demonstration page, Maxwell's equations:<md>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
+                </md></p>
 
-            <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
+                <notation>
+                    <usage>\nabla</usage>
+                    <description>gradient operator</description>
+                </notation>
 
-            <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+                <p>A small test that the extensible arrows library is included properly:<me>A\xmapsto[\text{bijection}]{\Phi+\Psi+\Theta}B</me></p>
 
-            <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
-                <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
-                <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
-            </mdn></p>
+                <p>Look back at the top of the source file of this document to see how to include your <tex /> macros just once.  For best results keep your macros simple and semantic.</p>
+
+                <p>Chris Hughes has made available <q>slanted</q>, or <q>beveled</q>, or <q>nice</q> fractions.  To wit, we mean fractions such as: <m>\sfrac{3}{8}</m>.  Use the built-in <c>\sfrac{}{}</c> macro in your mathematics to achieve this presentation.</p>
+
+                <p>We consider a system of equations.  We number the first and last equation (there are just two) and include an <c>xml:id</c> on each.  We reference the whole system later as the range of equations from the first to the last.<mdn>
+                    <mrow xml:id="equation-system-begin">\frac{dx}{dt} \amp = x^2 - 4x - y + 4</mrow>
+                    <mrow xml:id="equation-system-end">\frac{dy}{dt} \amp = x^3 - y.</mrow>
+                </mdn></p>
+
+            </subsection>
+
+            <subsection>
+                <title>Displayed Mathematics</title>
+
+                <p>Multi-line displays of mathematics are achieved with the <c>md</c> tag (<q>math display</q>), and the variant that produces numbers on each line, <c>mdn</c> (<q>math display numbered</q>), used within a paragraph (<c>p</c>).  As a good example of how XML syntax is superior, you author <m>n</m> lines of equations by enclosing each line inside of a <c>mrow</c> tag, rather than using <m>n-1</m> separators (such as <c>\\</c>).</p>
+
+                <p>If you use no ampersands to express alignment (read ahead), then each equation is centered independently on the width of the text.  This is implemented according to the AMSmath <latex /> package's <c>gather</c> environment.  Example:<md>
+                    <mrow>\frac{dx}{dt} = x^2 - 4x - y + 4</mrow>
+                    <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
+                </md></p>
+
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" autoname="yes" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of amersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                    <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
+                    <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
+                </md></p>
+
+                <p>MathBook XML will automatically detect the presence or absence of ampersands, but by defining macros for entire aligned equations, you can effectively hide the ampersands.  So the <c>@alignment</c> attribute can override automatic detection.  We use a simple <latex /> macro to demonstrate setting <c>alignment='align'</c> to override the use of a <c>gather</c> environment and use a <c>align</c> environment instead.  Example:<md alignment="align">
+                    <mrow>\myequation{\frac{dx}{dt}}{x^2 - 4x - y + 4}</mrow>
+                    <mrow>\myequation{\frac{dy}{dt}}{x^3 - y}.</mrow>
+                </md></p>
+
+                <p>The AMSmath <latex /> package's <c>alignat</c> environment is a third variant of alignment.  It never happens automatically, you need to ask for it with <c>alignment="alignat"</c>.  It is very similar to <c>align</c> but adds no space between the equation columns.  So you can leave it that way, or you can add your own <q>extra</q> space to suit.  Here is a previous example with no inter-column space:<md alignment="alignat">
+                    <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
+                    <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
+                </md>  There are a few caveats, due to the fact that the environment needs to be told how many columns you have:<ul>
+                    <li>Your first <c>mrow</c> is scanned to count the number of ampersand macros and/or characters (<c>\amp</c> or <c>&amp;amp;</c>), so add the right number to your first row to equal the maximum present across all rows.</li>
+                    <li>The scan of ampersands may not be perfect, so if it seems incorrect, please send a report and we may add an attribute for an override.</li>
+                    <li>If your number of ampersands is even (see advice above about using an odd number) behavior should still be correct, as in next example.</li>
+                </ul></p>
+
+                <p>If you want super-precise control over alignment of the terms of a system of equations (linear or not) you can use the <c>alignat</c> option to advantage by not including any extra space.  This example is modified slightly from a post by Alex Jordan:<md alignment="alignat">
+                    <mrow>2x \amp {}+{} \amp  y \amp {}+{} \amp 3z \amp {}={} \amp 10</mrow>
+                    <mrow>x  \amp       \amp    \amp {}+{} \amp  z \amp {}={} \amp 6</mrow>
+                    <mrow>x  \amp {}+{} \amp 3y \amp {}+{} \amp 2z \amp {}={} \amp 13.</mrow>
+                </md>Beautiful.</p>
+            </subsection>
         </section>
 
         <section>
@@ -1075,9 +1129,7 @@ the xsltproc executable.
                     <li><p>Two ampersands are authored as <c>&lt;ampersand /&gt;</c>: two strings of normal text.</p></li>
 
                     <li><p>For <latex /> output, the verbatim <c>c</c> element will be automatically delimited by a character that is not in the string.  The fault is a question mark, which you see here in the string.  So we have twice used the <c>latexsep</c> attribute with the value <c>|</c> (the <term>pipe</term> character) which cannot ever appear in a <init>URL</init>.</p></li>
-
                 </ul></p>
-
 
                 <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a verbatim font (so no need to consider the <c>latexsep</c> attribute in any way).</p>
 
@@ -1409,7 +1461,7 @@ the xsltproc executable.
                 <p>Figures, tables and side-by-sides that do not have a caption will automatically not receive a number.  So, in particular, a <c>figure</c> element can be used to place a centered <c>image</c>, with vertical breaks.  We interrupt this current list of figures to include a caption-less one, as a check that the numbering continues sequentially.</p>
 
                 <figure xml:id="figure-captionless-titleless-trefoil">
-                    <image source="images/trefoil.png" width="100"/>
+                    <image source="images/cross-square.png" width="100"/>
                 </figure>
 
             </subsection>
@@ -1966,7 +2018,7 @@ the xsltproc executable.
                             <li><p>There is an identity element, <m>e</m>.</p></li>
                             <li><p>For every element <m>b</m>, there is an element <m>c</m> (the inverse), such that <me>b\cdot c=c\cdot b = e.</me></p></li>
                         </ol>
-                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term index="yes">group</term>.</p>
+                        <p>If these conditions are met for a set <m>G</m>, then we say <m>G</m> is a <term>group</term>.</p>
                     </statement>
                 </definition>
 
@@ -2590,7 +2642,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. This is also a good time to demonstrate the <attribute>valign</attribute> attribute.</p>
+            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A line will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. This is also a good time to demonstrate the <c>&lt;valign&gt;</c> attribute.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>
@@ -2940,13 +2992,13 @@ the xsltproc executable.
                 <title>Unicode Characters for HTML Output</title>
 
                 <p>First, we discuss HTML output.  If you include Unicode characters in your MathBook XML source, they should survive just fine <foreign>en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
-                    <li>So that you can conhtinue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</li>
+                    <li><p>So that you can continue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</p></li>
 
-                    <li>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</li>
+                    <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <c latexsep="!">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
-                    <li>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</li>
+                    <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
             </paragraphs>
 
@@ -2965,29 +3017,204 @@ the xsltproc executable.
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements: </p>
+                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
-                <blockquote>
-                    <p>&#x0020; &#x0021; &#x0022; <hash /> <dollar /> <percent /> <ampersand /> &#x0027; &#x0028; &#x0029; &#x002A; &#x002B; &#x002C; &#x002D; &#x002E; &#x002F; &#x0030; &#x0031; &#x0032; &#x0033; &#x0034; &#x0035; &#x0036; &#x0037; &#x0038; &#x0039; &#x003A; &#x003B; <less /> &#x003D; &#x003E; &#x003F; &#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F; &#x0050; &#x0051; &#x0052; &#x0053; &#x0054; &#x0055; &#x0056; &#x0057; &#x0058; &#x0059; &#x005A; &#x005B; <backslash /> &#x005D; <circumflex /> <underscore /> &#x0060; &#x0061; &#x0062; &#x0063; &#x0064; &#x0065; &#x0066; &#x0067; &#x0068; &#x0069; &#x006A; &#x006B; &#x006C; &#x006D; &#x006E; &#x006F; &#x0070; &#x0071; &#x0072; &#x0073; &#x0074; &#x0075; &#x0076; &#x0077; &#x0078; &#x0079; &#x007A; <lbrace /> &#x007C; <rbrace /> <tilde /></p>
-                </blockquote>
+                <!-- ex &#x0020; space, not visible  -->
+
+                <table>
+                    <caption>Basic Latin, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
+                                                 <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
+                    <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
+                    <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
+                                                 <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
+                    <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
+                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell><backslash /></cell><cell>&#x005D;</cell><cell><circumflex /></cell><cell><underscore /></cell></row>
+                    <row><cell><c>006_</c></cell><cell>&#x0060;</cell><cell>&#x0061;</cell><cell>&#x0062;</cell><cell>&#x0063;</cell><cell>&#x0064;</cell><cell>&#x0065;</cell><cell>&#x0066;</cell><cell>&#x0067;</cell>
+                                                 <cell>&#x0068;</cell><cell>&#x0069;</cell><cell>&#x006A;</cell><cell>&#x006B;</cell><cell>&#x006C;</cell><cell>&#x006D;</cell><cell>&#x006E;</cell><cell>&#x006F;</cell></row>
+                    <row><cell><c>007_</c></cell><cell>&#x0070;</cell><cell>&#x0071;</cell><cell>&#x0072;</cell><cell>&#x0073;</cell><cell>&#x0074;</cell><cell>&#x0075;</cell><cell>&#x0076;</cell><cell>&#x0077;</cell>
+                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell><lbrace /></cell><cell>&#x007C;</cell><cell><rbrace /></cell><cell><tilde /></cell><cell>        </cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
             <paragraphs>
                 <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
 
-                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, while <c>U+00AD</c> is a soft hyphen.  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).For more details, see the fothcoming extensive tables in <c>examples/fonts/fonts-and-characters.xml</c> . Here are all of the 94 characters.</p>
+                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
-                <blockquote>
-                    <p>&#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC; &#x00AE; &#x00AF; &#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF; &#x00C0; &#x00C1; &#x00C2; &#x00C3; &#x00C4; &#x00C5; &#x00C6; &#x00C7; &#x00C8; &#x00C9; &#x00CA; &#x00CB; &#x00CC; &#x00CD; &#x00CE; &#x00CF; &#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF; &#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF; &#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</p>
-                </blockquote>
+                <table>
+                    <caption>Latin-1 Supplement, Regular</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                                                 <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
+                    <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
+                                                 <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
+                    <row><cell><c>00C_</c></cell><cell>&#x00C0;</cell><cell>&#x00C1;</cell><cell>&#x00C2;</cell><cell>&#x00C3;</cell><cell>&#x00C4;</cell><cell>&#x00C5;</cell><cell>&#x00C6;</cell><cell>&#x00C7;</cell>
+                                                 <cell>&#x00C8;</cell><cell>&#x00C9;</cell><cell>&#x00CA;</cell><cell>&#x00CB;</cell><cell>&#x00CC;</cell><cell>&#x00CD;</cell><cell>&#x00CE;</cell><cell>&#x00CF;</cell></row>
+                    <row><cell><c>00D_</c></cell><cell>&#x00D0;</cell><cell>&#x00D1;</cell><cell>&#x00D2;</cell><cell>&#x00D3;</cell><cell>&#x00D4;</cell><cell>&#x00D5;</cell><cell>&#x00D6;</cell><cell>&#x00D7;</cell>
+                                                 <cell>&#x00D8;</cell><cell>&#x00D9;</cell><cell>&#x00DA;</cell><cell>&#x00DB;</cell><cell>&#x00DC;</cell><cell>&#x00DD;</cell><cell>&#x00DE;</cell><cell>&#x00DF;</cell></row>
+                    <row><cell><c>00E_</c></cell><cell>&#x00E0;</cell><cell>&#x00E1;</cell><cell>&#x00E2;</cell><cell>&#x00E3;</cell><cell>&#x00E4;</cell><cell>&#x00E5;</cell><cell>&#x00E6;</cell><cell>&#x00E7;</cell>
+                                                 <cell>&#x00E8;</cell><cell>&#x00E9;</cell><cell>&#x00EA;</cell><cell>&#x00EB;</cell><cell>&#x00EC;</cell><cell>&#x00ED;</cell><cell>&#x00EE;</cell><cell>&#x00EF;</cell></row>
+                    <row><cell><c>00F_</c></cell><cell>&#x00F0;</cell><cell>&#x00F1;</cell><cell>&#x00F2;</cell><cell>&#x00F3;</cell><cell>&#x00F4;</cell><cell>&#x00F5;</cell><cell>&#x00F6;</cell><cell>&#x00F7;</cell>
+                                                 <cell>&#x00F8;</cell><cell>&#x00F9;</cell><cell>&#x00FA;</cell><cell>&#x00FB;</cell><cell>&#x00FC;</cell><cell>&#x00FD;</cell><cell>&#x00FE;</cell><cell>&#x00FF;</cell></row>
+                    </tabular>
+                </table>
             </paragraphs>
 
-            <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of this sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  This more thorough sample will perform well when processed with <c>xelatex</c>.</p>
+            <paragraphs>
+                <title>Monospace, Basic Latin and Latin-1 Supplement, <c>U+0000</c><ndash /><c>U+00FF</c></title>
+
+                <p>A monospace font is critical for samples of keyboard input and to distinguish exact technical input from running commentary.  We list here all of the reasonable characters from the first 256 Unicode code points.  (We skip the same 65 control characters from above, and the soft hyphen.)  These should all render fine in HTML and when processed with <c>xelatex</c>, however our focus with this sample article for PDF output is the capabilities when processed with <c>pdflatex</c>.  First, characters from <c>U+0000</c><ndash /><c>U+007F</c>.    (The two extra backslashes visible in <latex /> output are an artifact of placing these characters into a table and should be fixed.)</p>
+
+                <!-- ex &#x0000; - &#x001F; controls -->
+                <!-- ex &#x007F; control             -->
+                <table>
+                    <caption>Basic Latin, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>002_</c></cell><cell><c>&#x0020;</c></cell><cell><c>&#x0021;</c></cell><cell><c>&#x0022;</c></cell><cell><c>&#x0023;</c></cell><cell><c>&#x0024;</c></cell><cell><c>&#x0025;</c></cell><cell><c>&#x0026;</c></cell><cell><c>&#x0027;</c></cell>
+                                                     <cell><c>&#x0028;</c></cell><cell><c>&#x0029;</c></cell><cell><c>&#x002A;</c></cell><cell><c>&#x002B;</c></cell><cell><c>&#x002C;</c></cell><cell><c>&#x002D;</c></cell><cell><c>&#x002E;</c></cell><cell><c>&#x002F;</c></cell></row>
+                        <row><cell><c>003_</c></cell><cell><c>&#x0030;</c></cell><cell><c>&#x0031;</c></cell><cell><c>&#x0032;</c></cell><cell><c>&#x0033;</c></cell><cell><c>&#x0034;</c></cell><cell><c>&#x0035;</c></cell><cell><c>&#x0036;</c></cell><cell><c>&#x0037;</c></cell>
+                                                     <cell><c>&#x0038;</c></cell><cell><c>&#x0039;</c></cell><cell><c>&#x003A;</c></cell><cell><c>&#x003B;</c></cell><cell><c>&#x003C;</c></cell><cell><c>&#x003D;</c></cell><cell><c>&#x003E;</c></cell><cell><c latexsep="|">&#x003F;</c></cell></row>
+                        <row><cell><c>004_</c></cell><cell><c>&#x0040;</c></cell><cell><c>&#x0041;</c></cell><cell><c>&#x0042;</c></cell><cell><c>&#x0043;</c></cell><cell><c>&#x0044;</c></cell><cell><c>&#x0045;</c></cell><cell><c>&#x0046;</c></cell><cell><c>&#x0047;</c></cell>
+                                                     <cell><c>&#x0048;</c></cell><cell><c>&#x0049;</c></cell><cell><c>&#x004A;</c></cell><cell><c>&#x004B;</c></cell><cell><c>&#x004C;</c></cell><cell><c>&#x004D;</c></cell><cell><c>&#x004E;</c></cell><cell><c>&#x004F;</c></cell></row>
+                        <row><cell><c>005_</c></cell><cell><c>&#x0050;</c></cell><cell><c>&#x0051;</c></cell><cell><c>&#x0052;</c></cell><cell><c>&#x0053;</c></cell><cell><c>&#x0054;</c></cell><cell><c>&#x0055;</c></cell><cell><c>&#x0056;</c></cell><cell><c>&#x0057;</c></cell>
+                                                     <cell><c>&#x0058;</c></cell><cell><c>&#x0059;</c></cell><cell><c>&#x005A;</c></cell><cell><c>&#x005B;</c></cell><cell><c>&#x005C;</c></cell><cell><c>&#x005D;</c></cell><cell><c>&#x005E;</c></cell><cell><c>&#x005F;</c></cell></row>
+                        <row><cell><c>006_</c></cell><cell><c>&#x0060;</c></cell><cell><c>&#x0061;</c></cell><cell><c>&#x0062;</c></cell><cell><c>&#x0063;</c></cell><cell><c>&#x0064;</c></cell><cell><c>&#x0065;</c></cell><cell><c>&#x0066;</c></cell><cell><c>&#x0067;</c></cell>
+                                                     <cell><c>&#x0068;</c></cell><cell><c>&#x0069;</c></cell><cell><c>&#x006A;</c></cell><cell><c>&#x006B;</c></cell><cell><c>&#x006C;</c></cell><cell><c>&#x006D;</c></cell><cell><c>&#x006E;</c></cell><cell><c>&#x006F;</c></cell></row>
+                        <row><cell><c>007_</c></cell><cell><c>&#x0070;</c></cell><cell><c>&#x0071;</c></cell><cell><c>&#x0072;</c></cell><cell><c>&#x0073;</c></cell><cell><c>&#x0074;</c></cell><cell><c>&#x0075;</c></cell><cell><c>&#x0076;</c></cell><cell><c>&#x0077;</c></cell>
+                                                     <cell><c>&#x0078;</c></cell><cell><c>&#x0079;</c></cell><cell><c>&#x007A;</c></cell><cell><c>&#x007B;</c></cell><cell><c>&#x007C;</c></cell><cell><c>&#x007D;</c></cell><cell><c>&#x007E;</c></cell><cell>               </cell></row>
+                    </tabular>
+                </table>
+
+                <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
+
+                <p>Now the remaining characters from <c>U+0080</c><ndash /><c>U+00FF</c>.  Inline code (the <c>c</c> tag) and the <c>program</c> tag are implemented in <latex /> via the <c>listing</c> package and these characters require ad-hoc replacements for processing by <c>pdflatex</c>.  (You can see the replacements in the preamble of the <latex /> source for this document.)</p>
+
+                <!-- ex &#x0080; - &#x009F; controls -->
+                <!-- ex &#x00A0; non-breaking space  -->
+                <!-- ex &#x00AD; soft hyphen         -->
+                <table>
+                    <caption>Latin-1 Supplement, Monospace</caption>
+                    <tabular>
+                        <row><cell />
+                        <cell><c>0</c></cell>
+                        <cell><c>1</c></cell>
+                        <cell><c>2</c></cell>
+                        <cell><c>3</c></cell>
+                        <cell><c>4</c></cell>
+                        <cell><c>5</c></cell>
+                        <cell><c>6</c></cell>
+                        <cell><c>7</c></cell>
+                        <cell><c>8</c></cell>
+                        <cell><c>9</c></cell>
+                        <cell><c>A</c></cell>
+                        <cell><c>B</c></cell>
+                        <cell><c>C</c></cell>
+                        <cell><c>D</c></cell>
+                        <cell><c>E</c></cell>
+                        <cell><c>F</c></cell></row>
+                        <row><cell><c>00A_</c></cell><cell>        </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
+                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>        </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
+                        <row><cell><c>00B_</c></cell><cell><c>&#x00B0;</c></cell><cell><c>&#x00B1;</c></cell><cell><c>&#x00B2;</c></cell><cell><c>&#x00B3;</c></cell><cell><c>&#x00B4;</c></cell><cell><c>&#x00B5;</c></cell><cell><c>&#x00B6;</c></cell><cell><c>&#x00B7;</c></cell>
+                                                     <cell><c>&#x00B8;</c></cell><cell><c>&#x00B9;</c></cell><cell><c>&#x00BA;</c></cell><cell><c>&#x00BB;</c></cell><cell><c>&#x00BC;</c></cell><cell><c>&#x00BD;</c></cell><cell><c>&#x00BE;</c></cell><cell><c>&#x00BF;</c></cell></row>
+                        <row><cell><c>00C_</c></cell><cell><c>&#x00C0;</c></cell><cell><c>&#x00C1;</c></cell><cell><c>&#x00C2;</c></cell><cell><c>&#x00C3;</c></cell><cell><c>&#x00C4;</c></cell><cell><c>&#x00C5;</c></cell><cell><c>&#x00C6;</c></cell><cell><c>&#x00C7;</c></cell>
+                                                     <cell><c>&#x00C8;</c></cell><cell><c>&#x00C9;</c></cell><cell><c>&#x00CA;</c></cell><cell><c>&#x00CB;</c></cell><cell><c>&#x00CC;</c></cell><cell><c>&#x00CD;</c></cell><cell><c>&#x00CE;</c></cell><cell><c>&#x00CF;</c></cell></row>
+                        <row><cell><c>00D_</c></cell><cell><c>&#x00D0;</c></cell><cell><c>&#x00D1;</c></cell><cell><c>&#x00D2;</c></cell><cell><c>&#x00D3;</c></cell><cell><c>&#x00D4;</c></cell><cell><c>&#x00D5;</c></cell><cell><c>&#x00D6;</c></cell><cell><c>&#x00D7;</c></cell>
+                                                     <cell><c>&#x00D8;</c></cell><cell><c>&#x00D9;</c></cell><cell><c>&#x00DA;</c></cell><cell><c>&#x00DB;</c></cell><cell><c>&#x00DC;</c></cell><cell><c>&#x00DD;</c></cell><cell><c>&#x00DE;</c></cell><cell><c>&#x00DF;</c></cell></row>
+                        <row><cell><c>00E_</c></cell><cell><c>&#x00E0;</c></cell><cell><c>&#x00E1;</c></cell><cell><c>&#x00E2;</c></cell><cell><c>&#x00E3;</c></cell><cell><c>&#x00E4;</c></cell><cell><c>&#x00E5;</c></cell><cell><c>&#x00E6;</c></cell><cell><c>&#x00E7;</c></cell>
+                                                     <cell><c>&#x00E8;</c></cell><cell><c>&#x00E9;</c></cell><cell><c>&#x00EA;</c></cell><cell><c>&#x00EB;</c></cell><cell><c>&#x00EC;</c></cell><cell><c>&#x00ED;</c></cell><cell><c>&#x00EE;</c></cell><cell><c>&#x00EF;</c></cell></row>
+                        <row><cell><c>00F_</c></cell><cell><c>&#x00F0;</c></cell><cell><c>&#x00F1;</c></cell><cell><c>&#x00F2;</c></cell><cell><c>&#x00F3;</c></cell><cell><c>&#x00F4;</c></cell><cell><c>&#x00F5;</c></cell><cell><c>&#x00F6;</c></cell><cell><c>&#x00F7;</c></cell>
+                                                     <cell><c>&#x00F8;</c></cell><cell><c>&#x00F9;</c></cell><cell><c>&#x00FA;</c></cell><cell><c>&#x00FB;</c></cell><cell><c>&#x00FC;</c></cell><cell><c>&#x00FD;</c></cell><cell><c>&#x00FE;</c></cell><cell><c>&#x00FF;</c></cell></row>
+                    </tabular>
+                </table>
+
+                <p>The <c>pre</c> tag is implemented in <latex /> with the <c>fancyvrb</c> package.  You can compare results here with the table above, lines here are rows above.</p>
+
+                <!-- These two raise errors in both of following -->
+                <!-- ex &#x00A0; non-breaking space              -->
+                <!-- ex &#x00AD; soft hyphen                     -->
+                <pre>
+                    <cline>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</cline>
+                    <cline>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</cline>
+                    <cline>&#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F;</cline>
+                    <cline>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</cline>
+                    <cline>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</cline>
+                    <cline>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</cline>
+                </pre>
+
+                <p>The <c>console</c> tag is also implemented with <c>fancyvrb</c>, with adjustments for the input lines.  It will not look like it, but these are 8 such inputs, with similar results to above, but now bolded.</p>
+
+                <console>
+                    <input>  &#x00A1; &#x00A2; &#x00A3; &#x00A4; &#x00A5; &#x00A6; &#x00A7; &#x00A8; &#x00A9; &#x00AA; &#x00AB; &#x00AC;   &#x00AE; &#x00AF;</input>
+                    <input>&#x00B0; &#x00B1; &#x00B2; &#x00B3; &#x00B4; &#x00B5; &#x00B6; &#x00B7; &#x00B8; &#x00B9; &#x00BA; &#x00BB; &#x00BC; &#x00BD; &#x00BE; &#x00BF;</input>
+                    <input>&#x0040; &#x0041; &#x0042; &#x0043; &#x0044; &#x0045; &#x0046; &#x0047; &#x0048; &#x0049; &#x004A; &#x004B; &#x004C; &#x004D; &#x004E; &#x004F;</input>
+                    <input>&#x00D0; &#x00D1; &#x00D2; &#x00D3; &#x00D4; &#x00D5; &#x00D6; &#x00D7; &#x00D8; &#x00D9; &#x00DA; &#x00DB; &#x00DC; &#x00DD; &#x00DE; &#x00DF;</input>
+                    <input>&#x00E0; &#x00E1; &#x00E2; &#x00E3; &#x00E4; &#x00E5; &#x00E6; &#x00E7; &#x00E8; &#x00E9; &#x00EA; &#x00EB; &#x00EC; &#x00ED; &#x00EE; &#x00EF;</input>
+                    <input>&#x00F0; &#x00F1; &#x00F2; &#x00F3; &#x00F4; &#x00F5; &#x00F6; &#x00F7; &#x00F8; &#x00F9; &#x00FA; &#x00FB; &#x00FC; &#x00FD; &#x00FE; &#x00FF;</input>
+                </console>
+
+            </paragraphs>
+
+            <p>Again, more examples and more thorough explanations can be found in the sample: <c>examples/fonts/fonts-and-characters.xml</c>.  Be aware that the nature of the more advanced sample is that it will likely produce many errors when processed with <c>pdflatex</c>.  Adding <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c> to the <c>pdflatex</c> command-line will sometimes be less painless than acknowledging each error.  The more advanced sample will perform well when processed with <c>xelatex</c>.</p>
         </section>
 
         <section>
@@ -3340,7 +3567,15 @@ the xsltproc executable.
             <introduction>
               <title>Introduction</title>
 
-              <p>A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>.  The first three have some structure, the second three are atomic.  For HTML output, the entire <c>sidebyside</c> will be a knowl as a target of a cross reference, and may be born within a knowl (via the <c>html.knowl.sidebyside</c> switch).  Figures and tables (only) from within a side-by-side will be realized as knowls when the target of a cross-reference, but are never born as knowls within a side-by-side.</p>
+              <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page by grouping several small items together (<eg />, images).  So the <c>&lt;sidebyside&gt;</c> tag is primarily a layout device, though it should convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>.  For HTML output, the entire <c>sidebyside</c> will be a knowl as a target of a cross reference, and may be born within a knowl (via the <c>html.knowl.sidebyside</c> switch).  Figures and tables (only) from within a side-by-side will be realized as knowls when the target of a cross-reference, but are never born as knowls within a side-by-side.</p>
+
+              <p>As a first example, we have two single paragraphs, laid out with different widths, and slight margins on each side.  The widths have been chosen experimentally to get roughly identical heights.</p>
+
+                <sidebyside widths="60% 31%" margins="3%">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
+
+                    <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                </sidebyside>
             </introduction>
 
             <subsection>
@@ -3350,31 +3585,33 @@ the xsltproc executable.
 
                 <p>If a global caption is <em>not</em> present, then the figures will be labeled regularly, as for example, <xref ref="regular-figure" autoname="yes"/> and <xref ref="another-regular-figure" autoname="yes"/></p>
 
-                <p>The <c>width</c> can be specified for each child, or omitted, in which case it will be calculated automatically based on the <em>remaining</em> width available; for finer control, it is generally best to specify the width.</p>
+                <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There is no margin by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, then a margin is provided that equals half of the inter-panel space.</p>
 
-                <sidebyside xml:id="fig-sidebyside-global">
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
+                <p>With no attributes on the <c>sidebyside</c>, there is no margin, there is no inter-panel space, and each panel is the same width.</p>
+
+                <sidebyside widths="25.67% 25%" xml:id="fig-sidebyside-global">
+                    <caption>Side-by-side Figure, with subfigure children, no margin.</caption>
                     <figure width="25.67%" xml:id="fig-sidebyside-subfigure">
                         <caption></caption>
-                        <image source="images/trefoil.png">
+                        <image source="images/cross-square.png">
                             <description>Trefoil image</description>
                         </image>
                     </figure>
                     <figure width="25%">
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <sidebyside>
-                    <caption>Side-by-side Figure, with subfigure children.</caption>
+                <sidebyside widths="50% 25%" margins="auto">
+                    <caption>Side-by-side Figure, with subfigure children, automatic margin.</caption>
                     <figure width="50%">
                         <caption>width=50<percent/></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure width="25%">
                         <caption>width=25<percent/></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
@@ -3382,30 +3619,30 @@ the xsltproc executable.
                     <caption>Widths can be calculated automatically</caption>
                     <figure>
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure>
                         <caption></caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure>
                     <caption></caption>
-                    <image source="images/trefoil.png"/>
+                    <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <sidebyside>
+                <sidebyside widths="25% 25% 50%">
                     <figure xml:id="regular-figure">
                         <caption>Side-by-side Figures</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                     <figure xml:id="another-regular-figure">
                         <caption>Regular numbering</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="50%">
+                    <figure>
                         <caption>Regular numbering</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
             </subsection>
@@ -3413,62 +3650,60 @@ the xsltproc executable.
             <subsection>
                 <title>Images Without Captions</title>
 
-                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other; there's no need to specify the <c>width</c>, unless you want to fine tune things.</p>
+                <p>We can use the <c>sidebyside</c> element to put <c>images</c> next to each other.  This next example has <c>10%</c> margins, and the panels have widths <c>25%</c> and <c>40%</c>, leaving <c>15%</c> computed as the one inter-panel space.</p>
 
-                <sidebyside>
-                    <image source="images/trefoil.png"/>
-                    <image source="images/trefoil.png"/>
+                <sidebyside widths="25% 40%" margins="10%">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Now we fine-tune with different widths (which add up to 100<percent />).</p>
+                <p>Now we fine-tune with different widths (which add up to 100<percent />).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
 
-                <sidebyside>
-                    <image width="10%" source="images/trefoil.png"/>
-                    <image width="30%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
+                <sidebyside widths="10% 30% 20% 20% 20%" margins="0%" valigns="top middle bottom top middle">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>If you want an overall caption, but no sub-captions on your images, that is also straightforward.</p>
+                <p>If you want an overall caption, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.</p>
 
                 <sidebyside>
                     <caption>Two equally-spaced (identical) images</caption>
-                    <image source="images/trefoil.png"/>
-                    <image source="images/trefoil.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
-
-
 
             </subsection>
 
             <subsection>
                 <title>Vertical Alignment</title>
-                <p>Vertical alignment can be specified using the (optional) <c>valign</c> attribute which can take values <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>bottom</c>.</p>
+                <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
 
-                <sidebyside>
-                    <figure width="33%" valign="middle">
+                <sidebyside widths="33% 17% 50%" valigns="middle top middle">
+                    <figure>
                         <caption>Middle</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="17%" valign="top">
+                    <figure>
                         <caption>Top</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
-                    <figure width="50%" valign="middle">
+                    <figure>
                         <caption>Middle</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
-                <p>We may apply the same <c>valign</c> attribute to <c>images</c> without captions.</p>
+                <p>The singular version of the attribute, <c>valign</c>, can provide the same alignment to each panel, here we use five different widths, but all with vertical alignment of <c>middle</c>.</p>
 
-                <sidebyside>
-                    <image width="10%" valign="top" source="images/trefoil.png"/>
-                    <image width="10%" valign="bottom" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
-                    <image width="10%" valign="bottom" source="images/trefoil.png"/>
-                    <image width="20%" source="images/trefoil.png"/>
+                <sidebyside widths="2% 15% 20% 8% 25%" valign="middle">
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
             </subsection>
 
@@ -3477,62 +3712,41 @@ the xsltproc executable.
 
                 <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element, which can contain multiple paragraphs using the <c>p</c> element.</p>
 
-                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
+                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.  In addtion to captions, elements which allow titles will have those displayed above the panel.  So <c>paragraphs</c> can carry a <c>title</c>, but a single paragraph, <c>p</c>, will not.</p>
 
-                <sidebyside>
-                    <paragraphs width="20%" valign="middle">
-                        <title>Sample title</title>
+                <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
+                    <paragraphs>
+                        <title>Sample Title</title>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
                     </paragraphs>
-                    <paragraphs width="20%" valign="top">
+                    <paragraphs>
+                        <title>A Really Long Title on a Fairly Skinny Paragraphs Element</title>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                     </paragraphs>
-                    <p width="20%" valign="middle" halign="right">here is some text here is some text here is some text here is some text here</p>
-                    <p width="20%" valign="bottom" halign="center">here is some text here is some text here is some text here is some text here</p>
+                    <p>here is some text here is some text here is some text here is some text here</p>
+                    <p>here is some text here is some text here is some text here is some text here</p>
                 </sidebyside>
 
                 <p>Similarly, text can be put next to images.</p>
 
-                <sidebyside>
-                    <p width="50%" valign="middle"> here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
-                    <image width="20%" valign="top" source="images/trefoil.png"/>
+                <sidebyside widths="50% 20%" valigns="middle top">
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
+                    <image source="images/cross-square.png"/>
                 </sidebyside>
 
                 <p>You can even place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" autoname="yes"/>.</p>
 
-                <sidebyside>
-                    <paragraphs width="50%" valign="middle">
+                <sidebyside widths="50% 20%" valigns="middle top">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" autoname="yes"/> and math: <m>x^2</m></p>
                     </paragraphs>
-                    <figure width="20%" valign="top" xml:id="text-next-to-figure">
+                    <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
-                        <image source="images/trefoil.png" height="30" />
+                        <image source="images/cross-square.png" height="30" />
                     </figure>
                 </sidebyside>
-            </subsection>
-
-            <subsection>
-                <title>Horizontal Alignment</title>
-
-                <p>Text can be horizontally aligned to the <c>left</c> (default), <c>center</c>, or <c>right</c> using the optional <c>halign</c> attribute.</p>
-
-                <sidebyside>
-                    <paragraphs width="20%" halign="center" valign="bottom">
-                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
-                    </paragraphs>
-                    <paragraphs width="20%" halign="left" valign="top">
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                    </paragraphs>
-                    <paragraphs width="20%" halign="right" valign="middle">
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                        <p>here is some text here is some text here is some text here is some text here </p>
-                    </paragraphs>
-                </sidebyside>
-
             </subsection>
 
             <subsection>
@@ -3540,9 +3754,9 @@ the xsltproc executable.
 
                 <p>Tables can also be put side-by-side, as demonstrated below in <xref ref="table-sidebyside-global" autoname="yes"/>; naturally, subtables can be referenced as in <xref ref="table-sidebyside-subtable" autoname="yes"/>.</p>
 
-                <sidebyside xml:id="table-sidebyside-global">
+                <sidebyside widths="50% 25%" xml:id="table-sidebyside-global">
                     <caption>Side-by-side Table, with subtable children.</caption>
-                    <table halign="left" width="50%" xml:id="table-sidebyside-subtable">
+                    <table xml:id="table-sidebyside-subtable">
                         <caption>width=50<percent/></caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -3563,7 +3777,7 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <table width="25%">
+                    <table>
                         <caption>width=25<percent/></caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -3585,6 +3799,7 @@ the xsltproc executable.
                         </tabular>
                     </table>
                 </sidebyside>
+
                 <sidebyside>
                     <caption>Widths can be calculated automatically.</caption>
                     <table>
@@ -3701,78 +3916,6 @@ the xsltproc executable.
                 </sidebyside>
             </subsection>
 
-            <subsection>
-                <title>Horizontal and Vertical Alignment</title>
-
-                <p>Tables within the <c>sidebyside</c> element can accept the <c>halign</c> and <c>valign</c> attributes; see <xref ref="table-regular-halign-demo" /> and <xref ref="table-regular-valign-demo" />. The <c>halign</c> attribute can take values <c>left</c>, <c>center</c> (default), and <c>right</c>; the <c>valign</c> attribute can take values <c>top</c>, <c>middle</c>, and <c>bottom</c> (default).</p>
-
-                <sidebyside>
-                    <caption>Global Caption</caption>
-                    <table>
-                        <caption></caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table xml:id="table-regular-halign-demo" halign="right">
-                        <caption>halign="right"</caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                 <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                    <table xml:id="table-regular-valign-demo" valign="top">
-                        <caption>valign="top"</caption>
-                        <tabular top="minor" left="minor" halign="center">
-                            <col right="medium"/>
-                            <col right="major"/>
-                            <col />
-                            <!--  -->
-                            <row bottom="medium">
-                                <cell>1111</cell>
-                                <cell right="minor">2222</cell>
-                            </row>
-                            <row bottom="major">
-                                <cell>aaaa</cell>
-                                <cell right="medium">bbbb</cell>
-                            </row>
-                            <row>
-                                <cell bottom="minor">AAAA</cell>
-                                <cell bottom="major" right="major">BBBB</cell>
-                            </row>
-                        </tabular>
-                    </table>
-                </sidebyside>
-            </subsection>
 
             <subsection>
                 <title>Tables Next to Figures</title>
@@ -3804,7 +3947,7 @@ the xsltproc executable.
                     <!--  -->
                     <figure xml:id="figure-next-table">
                         <caption>Figure next to a Table</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
 
@@ -3834,7 +3977,7 @@ the xsltproc executable.
                     <!--  -->
                     <figure xml:id="figure-next-table-sublabeled">
                         <caption>Figure next to a Table</caption>
-                        <image source="images/trefoil.png"/>
+                        <image source="images/cross-square.png"/>
                     </figure>
                 </sidebyside>
             </subsection>
@@ -3844,8 +3987,8 @@ the xsltproc executable.
 
                 <p>Tables can go next to text blocks.</p>
 
-                <sidebyside>
-                    <table valign="top">
+                <sidebyside widths="50% 20% 20%" valigns="top top middle">
+                    <table>
                         <caption>Table next to text</caption>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
@@ -3866,12 +4009,12 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <paragraphs width="20%" halign="left" valign="top">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                     </paragraphs>
-                    <paragraphs width="20%" halign="center" valign="middle">
+                    <paragraphs>
                         <p>here is some text here is some text here is some text here is some text here </p>
                         <p>here is some text here is some text here is some text here is some text here </p>
                     </paragraphs>
@@ -3969,28 +4112,24 @@ the xsltproc executable.
                 <p>Other objects such as lists can be put in the <c>sidebyside</c> element.</p>
 
                 <sidebyside>
-                    <paragraphs>
                         <ol>
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                             <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
                         </ol>
-                    </paragraphs>
-                    <paragraphs>
                         <ul>
                             <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                             <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />.</p></li>
                             <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
                             <li><p>Figures: An early plot, Figure<nbsp /><xref ref="figure-function-derivative" />.</p></li>
                         </ul>
-                    </paragraphs>
                 </sidebyside>
 
                 <p>You can even experiment with <em>aligned</em> equations in the <c>sidebyside</c> element.</p>
 
-                <sidebyside>
-                    <paragraphs valign="middle">
+                <sidebyside valigns="middle top">
+                    <paragraphs>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
@@ -4007,6 +4146,31 @@ the xsltproc executable.
                         </md></p>
                     </paragraphs>
                 </sidebyside>
+            </subsection>
+
+            <subsection>
+                <title>Side-By-Side Groups</title>
+
+                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is experimental.  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Here are the planned distinctions:<ul>
+                    <li>Attributes on the <c>sbsgroup</c> are global and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.</li>
+                    <li>With an overall caption on the <c>sbsgroup</c>, the sub-numbering of the panels is consecutive across all of the panels.  So it is an error to have a caption on any <c>sidebyside</c> within an <c>sbsgroup</c>.</li>
+                    <li>If the only captions present are for individual panels, then they get regular numbering, not sub-numbering.</li>
+                </ul>  The next example demonstrates some of this behavior.</p>
+
+                <sbsgroup widths="5% 5% 5%" margins="30%">
+                    <caption>Overall SBS Group</caption>
+                    <sidebyside>
+                        <!-- <caption>This is an error if un-commented.</caption> -->
+                        <p>One.</p>
+                        <p>Two.</p>
+                        <p>Three.</p>
+                    </sidebyside>
+                    <sidebyside widths="25% 20% 15%" margins="5%">
+                        <p>Four.</p>
+                        <p>Five.</p>
+                        <p>Six.</p>
+                    </sidebyside>
+                </sbsgroup>
             </subsection>
         </section>
 

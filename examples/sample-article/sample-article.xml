@@ -654,7 +654,7 @@ the xsltproc executable.
             <subsection>
                 <title>Hierarchy</title>
 
-                <paragraphs>
+                <paragraphs xml:id="hierarchy-structure">
                     <title>Structure</title>
 
                     <p>This section of this article has subsections and subsubsections.  In a book you can have chapters enclosing multiple sections.  There is one finer subdivision, it is achieved with the <c>paragraphs</c> element.</p>
@@ -1047,7 +1047,7 @@ the xsltproc executable.
                         <title><q>Normal</q> Text</title>
                         <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
                     </li>
-                    <li>
+                    <li xml:id="reserved-characters-mathematics">
                         <title>Mathematics</title>
                         <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
                     </li>
@@ -2949,6 +2949,8 @@ the xsltproc executable.
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" autoname="yes" /></p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element: <xref ref="assemblage-basics">text to xref an assemblage</xref></p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" autoname="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" autoname="title" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul>
 
@@ -4146,6 +4148,49 @@ the xsltproc executable.
                         </md></p>
                     </paragraphs>
                 </sidebyside>
+
+                <p>Pre-formatted text may be incuded by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is somewhat easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
+
+                <!-- https://excelwithbusiness.com/blog/post/web-design/say-hello-world-in-28-different-programming-languages -->
+                <sidebyside widths="40% 45%">
+                    <caption><q>Hello, World!</q> in Pascal and C++</caption>
+                    <pre>
+                        <cline>program HelloWorld;</cline>
+                        <cline>begin</cline>
+                        <cline>  WriteLn('Hello, world!');</cline>
+                        <cline>end.</cline>
+                    </pre>
+                    <pre>
+                    #include
+
+                    int main()
+                    {
+                        std::cout &lt;&lt; "Hello, world!
+                    ";
+                        return 0;
+                    }
+                    </pre>
+                </sidebyside>
+
+                <sidebyside widths="25% 40%" valign="middle" margins="auto">
+                    <caption>A graph defined by data (from Keller and Trotter's <booktitle>Applied Combinatorics</booktitle>)</caption>
+                    <pre>
+                        graph1.txt
+                        9
+                        6 2
+                        1 5
+                        1 7
+                        6 8
+                        9 1
+                        4 3
+                        5 7
+                        1 3
+                        5 9
+                        7 9
+                    </pre>
+                    <image source="images/cross-square.png" />
+                </sidebyside>
+
             </subsection>
 
             <subsection>

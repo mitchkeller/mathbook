@@ -43,8 +43,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!--  -->
 <!-- LaTeX executable, "engine"                       -->
-<!-- pdflatex is default, xelatex for Unicode support -->
-<!-- N.B. This has no effect, and may never.  xelatex support is automatic -->
+<!-- pdflatex is default, xelatex or lualatex for Unicode support -->
+<!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
@@ -351,20 +351,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% This LaTeX file may be compiled with pdflatex or xelatex&#xa;</xsl:text>
+    <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex&#xa;</xsl:text>
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
-    <xsl:text>%% Generally, xelatex will do better languages other than US English&#xa;</xsl:text>
+    <xsl:text>%% Generally, xelatex and lualatex will do better languages other than US English&#xa;</xsl:text>
     <xsl:text>%% You can pick from the conditional if you will only ever use one engine&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
-    <xsl:text>\usepackage{ifxetex}&#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% fontspec package will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
-    <xsl:text>\usepackage{xltxtra}&#xa;</xsl:text>
+    <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <!-- TODO: put a xelatex font package hook here? -->
-    <xsl:text>%% end: xelatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% realscripts is the only part of xltxtra relevant to lualatex &#xa;</xsl:text>
+    <xsl:text>\ifluatex\usepackage{realscripts}\fi&#xa;</xsl:text>
+    <!-- TODO: put a xelatex/lualatex font package hook here? -->
+    <xsl:text>%% &#xa;</xsl:text>
+    <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
+    <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
+    <xsl:text>\setdefaultlanguage{english}&#xa;</xsl:text>
+    <xsl:text>%% Greek (Modern)&#xa;</xsl:text>
+    <!-- <xsl:text>\setotherlanguage[variant=ancient,numerals=greek]{greek}&#xa;</xsl:text> -->
+    <xsl:text>\setotherlanguage[numerals=greek]{greek}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily\greekfont[Script=Greek]{GFS Artemisia}&#xa;</xsl:text>
+    <xsl:text>%% Magyar (Hungarian)&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{magyar}&#xa;</xsl:text>
+    <xsl:text>%% Spanish&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{spanish}&#xa;</xsl:text>
+    <xsl:text>%% Vietnamese&#xa;</xsl:text>
+    <xsl:text>\setotherlanguage{vietnamese}&#xa;</xsl:text>
+    <!-- Korean gloss file may appear soon, 2016-07-25 -->
+    <!-- <xsl:text>%% Korean&#xa;</xsl:text> -->
+    <!-- <xsl:text>\setotherlanguage{korean}&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily\koreanfont{NanumMyeongjo}&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily\koreanfont[Script=Hangul]{UnBatang}&#xa;</xsl:text> -->
+    <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
@@ -384,16 +405,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
     <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
     <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
-    <xsl:text>%% xelatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
-    <xsl:text>%% xelatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
-    <xsl:text>%% xelatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
+    <xsl:text>%% xelatex,lualatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
     <xsl:text>%% &#xa;</xsl:text>
-    <xsl:text>\ifthenelse{\boolean{xetex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex-specific monospace font&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
     <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
     <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
-    <!-- TODO: put a xelatex monospace font package hook here? -->
-    <xsl:text>%% end: xelatex-specific monospace font&#xa;</xsl:text>
+    <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
+    <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
      <xsl:text>\usepackage[varqu]{zi4}&#xa;</xsl:text>
@@ -511,6 +532,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for units and number formatting&#xa;</xsl:text>
         <xsl:text>\usepackage[per-mode=fraction]{siunitx}&#xa;</xsl:text>
         <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
+        <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
         <xsl:text>%% Common non-SI units&#xa;</xsl:text>
         <xsl:for-each select="document('mathbook-units.xsl')//base[@siunitx]">
             <xsl:text>\DeclareSIUnit\</xsl:text>
@@ -2306,6 +2328,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
+    <xsl:if test="@xml:lang">
+        <xsl:text>\begin{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@xml:lang='el'">
+                <xsl:text>greek</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='hu-HU'">
+                <xsl:text>magyar</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='es-ES'">
+                <xsl:text>spanish</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='vi-VN'">
+                <xsl:text>vietnamese</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="subdivision-name" />
@@ -2354,6 +2394,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="*[not(self::author)]" />
+    <xsl:if test="@xml:lang">
+        <xsl:text>\end{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@xml:lang='el'">
+                <xsl:text>greek</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='hu-HU'">
+                <xsl:text>magyar</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='es-ES'">
+                <xsl:text>spanish</xsl:text>
+            </xsl:when>
+            <xsl:when test="@xml:lang='vi-VN'">
+                <xsl:text>vietnamese</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- transition to book backmatter, if done with last appendix -->
     <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
         <xsl:text>%&#xa;</xsl:text>
@@ -3372,18 +3430,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- Description lists get additional argument next -->
+<!-- Description lists get title as additional argument -->
 <xsl:template match="dl/li">
-    <xsl:text>\item</xsl:text>
+    <xsl:text>\item[</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>]</xsl:text>
+    <!-- label will protect content, so no {} -->
+    <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />
-</xsl:template>
-
-<!-- Description lists *must* have titled elements -->
-<!-- Leave space before start of content           -->
-<xsl:template match="dl/li/title">
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>]{}</xsl:text>
 </xsl:template>
 
 <!-- Video -->
@@ -3767,28 +3821,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "pre" is analogous to HTML tag of the same name       -->
-<!-- We clean up line-broken text, just like for Sage code -->
-<!-- or we use cline to structure line-by-line             -->
+<!-- "pre" is analogous to the HTML tag of the same name -->
+<!-- The "interior" templates decide between two styles  -->
+<!--   (a) clean up raw text, just like for Sage code    -->
+<!--   (b) interpret cline as line-by-line structure     -->
+<!-- (See templates in xsl/mathbook-common.xsl file)     -->
+<!-- Then wrap in a  verbatim  environment               -->
 <xsl:template match="pre">
     <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="." />
-        </xsl:call-template>
+    <xsl:apply-templates select="." mode="interior"/>
     <xsl:text>\end{verbatim}&#xa;</xsl:text>
 </xsl:template>
-
-<!-- With a "cline" element present, we assume    -->
-<!-- that is the entire structure (see the cline  -->
-<!-- template in the mathbook-common.xsl file)    -->
-<xsl:template match="pre[cline]">
-    <xsl:text>\begin{verbatim}&#xa;</xsl:text>
-    <xsl:apply-templates select="cline" />
-    <xsl:text>\end{verbatim}&#xa;</xsl:text>
-</xsl:template>
-
-
-
 
 <xsl:template match="email">
     <xsl:text>\href{mailto:</xsl:text>
@@ -4440,14 +4483,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newsavebox{\panelbox</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\savebox{\panelbox</xsl:text>
-    <xsl:apply-templates select="." mode="panel-id" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="panel-latex-box">
-        <xsl:with-param name="width" select="$width" />
-    </xsl:apply-templates>
-    <xsl:text>}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <!-- Most panel content is amenable to a \savebox           -->
+    <!-- Exceptions require different constructions as a LR box -->
+    <xsl:choose>
+        <xsl:when test="self::pre">
+            <xsl:text>\begin{lrbox}{\panelbox</xsl:text>
+            <xsl:apply-templates select="." mode="panel-id" />
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="panel-latex-box">
+                <xsl:with-param name="width" select="$width" />
+            </xsl:apply-templates>
+            <xsl:text>\end{lrbox}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\savebox{\panelbox</xsl:text>
+            <xsl:apply-templates select="." mode="panel-id" />
+            <xsl:text>}{&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="panel-latex-box">
+                <xsl:with-param name="width" select="$width" />
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\newlength{\ph</xsl:text>
     <xsl:apply-templates select="." mode="panel-id" />
     <xsl:text>}</xsl:text>
@@ -4677,6 +4735,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
         <xsl:text>}</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- Verbatim text from the content of a "pre" element       -->
+<!-- is made into a LaTeX box with the  fancyvrb "BVerbatim" -->
+<!-- environment, which is then saved in an LR box above     -->
+<!-- We cannot see an easy way to get the debugging wrapper  -->
+<xsl:template match="pre" mode="panel-latex-box">
+    <xsl:param name="width" />
+    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
+    <xsl:text>\begin{BVerbatim}</xsl:text>
+    <xsl:text>[boxwidth=</xsl:text>
+    <xsl:value-of select="$percent" />
+    <xsl:text>\linewidth,baseline=b]</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="interior"/>
+    <xsl:text>\end{BVerbatim}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- needs work to support SVG, no extension PDFs       -->
@@ -5677,7 +5751,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -5712,7 +5786,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|ol/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>

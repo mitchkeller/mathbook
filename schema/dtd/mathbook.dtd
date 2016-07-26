@@ -241,6 +241,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 
 <!-- a collection or summary, minimal structure, highlighted presentation -->
 <!ELEMENT assemblage (title?, index*, (p|table|figure|sidebyside)+)>
+    <!ATTLIST assemblage xml:id ID #IMPLIED>
 
 <!ELEMENT list (title?, index*, introduction?, (ol|ul|dl), conclusion?)>
     <!ATTLIST list xml:id ID #IMPLIED>
@@ -355,7 +356,7 @@ lbracket|rbracket|ldblbracket|rdblbracket|langle|rangle|tilde|backslash|asterisk
 <!-- Side By Side -->
 <!-- ############ -->
 
-<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl)*)>
+<!ELEMENT sidebyside  (caption?, (figure|image|table|tabular|paragraphs|p|ol|ul|dl|pre)*)>
     <!ATTLIST sidebyside xml:id ID #IMPLIED>
     <!ATTLIST sidebyside   margins   CDATA                 #IMPLIED>
     <!ATTLIST sidebyside   width     CDATA                 #IMPLIED>

@@ -3306,7 +3306,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <!-- no extension, presume SVG manufactured -->
-        <!-- TODO: pass along side-by-side CSS somehow -->
         <xsl:when test="$extension=''">
             <xsl:call-template name="svg-wrapper">
                 <xsl:with-param name="svg-filename">
@@ -3315,14 +3314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:with-param>
                 <xsl:with-param name="png-fallback-filename" />
                 <xsl:with-param name="image-width">
-                    <xsl:choose>
-                        <xsl:when test="@width">
-                            <xsl:value-of select="@width" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>90%</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="." mode="image-width" />
                 </xsl:with-param>
                 <xsl:with-param name="image-description">
                     <xsl:apply-templates select="description" />
@@ -3332,23 +3324,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- with extension, just include it -->
         <xsl:otherwise>
             <xsl:element name="img">
-                <!-- side-by-side extras with width, or plain width attribute-->
-                <xsl:choose>
-                    <xsl:when test="@width">
-                        <xsl:attribute name="width">
-                            <xsl:value-of select="@width" />
-                        </xsl:attribute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:attribute name="width">
-                            <xsl:text>90%</xsl:text>
-                        </xsl:attribute>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <!-- TODO: abandon, deprecate height specification (along with LaTeX code) -->
-                <xsl:if test="@height">
-                    <xsl:attribute name="height"><xsl:value-of select="@height" /></xsl:attribute>
-                </xsl:if>
+                <xsl:attribute name="width">
+                    <xsl:apply-templates select="." mode="image-width" />
+                </xsl:attribute>
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source" />
                 </xsl:attribute>
@@ -3361,54 +3339,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A plain image is just a light wrapper and content -->
-<!-- describes the image type and dictates result      -->
-<xsl:template match="image">
-    <xsl:apply-templates select="asymptote|sageplot|latex-image-code" />
-</xsl:template>
-
 <!-- SVG's produced by mbx script                  -->
 <!--   Asymptote graphics language                 -->
 <!--   LaTeX source code images                    -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D -->
-<xsl:template match="image/asymptote|image/latex-image-code|image/sageplot">
+<xsl:template match="image[asymptote]|image[latex-image-code]|image[sageplot]">
     <xsl:call-template name="svg-wrapper">
         <xsl:with-param name="svg-filename">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:with-param>
         <xsl:with-param name="png-fallback-filename">
-            <xsl:if test="self::sageplot">
+            <xsl:if test="sageplot">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select=".." mode="internal-id" />
+                <xsl:apply-templates select="." mode="internal-id" />
                 <xsl:text>.png</xsl:text>
             </xsl:if>
         </xsl:with-param>
         <xsl:with-param name="image-width">
-            <xsl:choose>
-                <xsl:when test="../@width">
-                    <xsl:value-of select="../@width" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>90%</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="image-width" />
         </xsl:with-param>
         <xsl:with-param name="image-description">
-            <xsl:apply-templates select="../description" />
+            <xsl:apply-templates select="description" />
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- A named template creates the infrastructure for an SVG image -->
-<!-- Parameters -->
+<!-- Parameters                                 -->
 <!-- svg-filename: required, full relative path -->
-<!-- png-fallback-filename: optional -->
-<!-- image-width: required -->
-<!-- image-description: optional -->
+<!-- png-fallback-filename: optional            -->
+<!-- image-width: required                      -->
+<!-- image-description: optional                -->
 <xsl:template name="svg-wrapper">
     <xsl:param name="svg-filename" />
     <xsl:param name="png-fallback-filename" select="''" />
@@ -3752,19 +3717,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- needs work to support SVG, no extension @source -->
-<!-- Make a panel of the correct width, then  -->
-<!-- insert the image at 100% width and let   -->
-<!-- height follow to preserve aspect ratio   -->
+<!-- "image-width" modal template can override a width        -->
+<!-- For an image inside a width-constrained panel, we simply -->
+<!-- require the image to fill the panel with a 100% width    -->
+<!-- Otherwise, just do the usual                             -->
 <xsl:template match="image" mode="panel-html-box">
-    <xsl:element name="img">
-        <xsl:attribute name="width">
-            <xsl:text>100%</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="src">
-            <xsl:value-of select="@source" />
-        </xsl:attribute>
-    </xsl:element>
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="width-override" select="'100%'" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- A figure or table is just a container to hold a -->
@@ -3853,6 +3813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2014/03/07:  http://flowplayer.org/docs/setup.html                     -->
 <!-- TODO: use for-each and extension matching to preferentially use WebM format -->
 <!-- <source type="video/mp4" src="http://mydomain.com/path/to/intro.webm">     -->
+<!-- TODO: respect @width attribute on ext rewrite, see YouTube -->
 <xsl:template match="video">
     <div class="flowplayer" style="width:200px">
         <xsl:text disable-output-escaping='yes'>&lt;video controls>&#xa;</xsl:text>
@@ -3872,17 +3833,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
 <!-- start/end time parameters -->
 <xsl:template match="video[@youtube]">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="image-width" />
+    </xsl:variable>
     <xsl:variable name="width-fraction">
-        <xsl:choose>
-            <xsl:when test="@width">
-                <!-- user-supplied as "nn%" -->
-                <xsl:apply-templates select="." mode="width-percent-to-real" />
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- 85% to account for figure margins -->
-                <xsl:text>0.85</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="substring-before($width,'%') div 100" />
     </xsl:variable>
     <!-- assumes 16:9 ratio (0.5625), make configurable -->
     <xsl:variable name="aspect-ratio">

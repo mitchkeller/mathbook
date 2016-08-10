@@ -555,6 +555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:if>
     <xsl:if test="/mathbook//case[@direction]">
+        <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
     </xsl:if>
@@ -898,7 +899,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- New names are necessary to make "within" numbering possible -->
     <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
     <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
-    <xsl:if test="//figure or //table or //listing">
+    <xsl:if test="//figure or //table or //listing or //sidebyside">
         <xsl:text>%% Figures, Tables, Listings, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
@@ -925,7 +926,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\@addtoreset{subtable}{figure}&#xa;</xsl:text>
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//figure">
+        <xsl:if test="//figure or //sidebyside">
             <xsl:text>% Figure environment setup so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
@@ -2589,10 +2590,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- No newline after macros, so inline to text      -->
 <!-- A proof gets no metadata in DTD                 -->
 <!-- but if that changes, ignore in "preceding" test -->
-<xsl:template match="case[@direction]">
+<xsl:template match="case">
     <xsl:if test="preceding-sibling::*">
         <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="label" />
     <xsl:choose>
         <xsl:when test="@direction='forward'">
             <xsl:text>\forwardimplication{}</xsl:text>
@@ -2603,6 +2605,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- DTD will catch wrong values -->
         <xsl:otherwise />
     </xsl:choose>
+    <!-- arrows should provide trailing space here -->
+    <xsl:if test="title">
+        <xsl:text>\textit{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}. </xsl:text>
+    </xsl:if>
+    <!-- period should provide trailing space -->
     <xsl:apply-templates select="*" />
 </xsl:template>
 
@@ -4780,7 +4789,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*|text()" />
         </xsl:when>
         <xsl:when test="self::paragraphs">
-            <xsl:apply-templates select="p" />
+            <xsl:apply-templates select="p|blockquote" />
         </xsl:when>
         <xsl:when test="self::tabular">
             <xsl:text>\centering</xsl:text>
@@ -5844,7 +5853,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- anchors/labels below and then we must point to           -->
 <!-- them with \hyperlink{}{} (nee hyperref[]{}).             -->
 <!-- (See also modal templates for "label" and "xref-number") -->
-<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|exercisegroup" mode="xref-link">
+<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup" mode="xref-link">
     <xsl:param name="content" />
     <xsl:text>\hyperlink{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -5879,7 +5888,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- vertical space when used in list items and it seems          -->
 <!-- to now behave well without it  (2015-12-12)                  -->
 <!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
+<xsl:template match="paragraphs|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|contributor" mode="label">
     <xsl:text>\hypertarget{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}{}</xsl:text>

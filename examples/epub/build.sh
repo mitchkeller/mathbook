@@ -10,7 +10,7 @@
 shopt -s -o nounset
 
 # MathBook XML paths
-declare MB=${HOME}/mathbook/mathbook
+declare MB=${HOME}/Documents/github/mathbook
 declare MBXSL=${MB}/xsl
 declare EPUBSCRIPT=${MB}/examples/epub
 
@@ -19,12 +19,12 @@ declare EPUBSCRIPT=${MB}/examples/epub
 # https://github.com/pkra/mathjax-node-page
 # RAB: 2019-05-01 in ~/node_modules; to update
 #      ~$ npm install mathjax-node-page
-declare MJNODE=/home/rob/node_modules/mathjax-node-page
+declare MJNODE=${HOME}/node_modules/mathjax-node-page
 
 # Working areas
 # DEBUG saves post-xsltproc, pre-mathjax-node
 # and also post-mathjax-node, pre-sed
-declare SCRATCH=/tmp/scratch
+declare SCRATCH=${MB}/examples/epub/scratch
 declare EPUBOUT=${SCRATCH}/epub
 declare DEBUG=${SCRATCH}/debug
 

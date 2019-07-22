@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+<!--**************************************-->
+<!--*    Generated from PreTeXt source   *-->
+<!--*    on 2019-07-22T09:29:38-05:00    *-->
+<!--*                                    *-->
+<!--*      https://pretextbook.org       *-->
+<!--*                                    *-->
+<!--**************************************-->
+<link href="../css/pretext-epub.css" rel="stylesheet" type="text/css"/></head>
+  <body>
+    <div class="hidden-content" style="display:none">\(\newcommand{\doubler}[1]{2#1}
+\newcommand{\lt}{&lt;}
+\newcommand{\gt}{&gt;}
+\newcommand{\amp}{&amp;}
+\)</div>
+    <section class="chapter" id="chapter-3">
+      <h2 class="heading"><span class="type">Chapter</span> <span class="codenumber">3</span> <span class="title">A Bit of Math</span></h2>
+      <p id="p-9">This paragraph has some inline math, a Diophantine equation, \(x^2 + \doubler{y^2} = z^2\text{.}\)  And some display math about infinite series:</p>
+      <div class="displaymath">
+\begin{equation*}
+\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.
+\end{equation*}
+</div>
+      <p>Look at the XML source to see how <span class="latex-logo">L<span class="A">a</span>T<span class="E">e</span>X</span> macros are employed.</p>
+      <p id="p-10">Nice.</p>
+    </section>
+  </body>
+</html>

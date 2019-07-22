@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+<!--**************************************-->
+<!--*    Generated from PreTeXt source   *-->
+<!--*    on 2019-07-22T09:29:39-05:00    *-->
+<!--*                                    *-->
+<!--*      https://pretextbook.org       *-->
+<!--*                                    *-->
+<!--**************************************-->
+<link href="../css/pretext-epub.css" rel="stylesheet" type="text/css"/></head>
+  <body>
+    <div class="hidden-content" style="display:none">\(\newcommand{\doubler}[1]{2#1}
+\newcommand{\lt}{&lt;}
+\newcommand{\gt}{&gt;}
+\newcommand{\amp}{&amp;}
+\)</div>
+    <section class="index" id="index-1">
+      <h2 class="heading hide-type"><span class="type">Index</span> <span class="codenumber"/> <span class="title">Index</span></h2>
+      <div class="indexletter" id="indexletter-d">
+        <div class="indexitem">Diophantine equation<span class="indexknowl">, <a href="chapter-3.xhtml#p-9" class="internal" title="Paragraph">Paragraph</a></span></div>
+      </div>
+      <div class="indexletter" id="indexletter-p">
+        <div class="indexitem">PNG<span class="indexknowl">. <em class="see">See</em> Portable Network Graphics</span></div>
+        <div class="indexitem">Portable Network Graphics (PNG)<span class="indexknowl">, <a href="chapter-4.xhtml#p-11" class="internal" title="Paragraph">Paragraph</a></span></div>
+      </div>
+    </section>
+  </body>
+</html>

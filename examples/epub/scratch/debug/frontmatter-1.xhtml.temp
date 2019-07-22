@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+<!--**************************************-->
+<!--*    Generated from PreTeXt source   *-->
+<!--*    on 2019-07-22T09:29:38-05:00    *-->
+<!--*                                    *-->
+<!--*      https://pretextbook.org       *-->
+<!--*                                    *-->
+<!--**************************************-->
+<link href="../css/pretext-epub.css" rel="stylesheet" type="text/css"/></head>
+  <body>
+    <div class="hidden-content" style="display:none">\(\newcommand{\doubler}[1]{2#1}
+\newcommand{\lt}{&lt;}
+\newcommand{\gt}{&gt;}
+\newcommand{\amp}{&amp;}
+\)</div>
+    <section class="frontmatter" id="frontmatter-1">
+      <h2 class="heading">
+        <span class="title">An EPUB Sampler</span>
+      </h2>
+      <div class="author">
+        <div class="author-name">Rob Beezer</div>
+        <div class="author-info"/>
+      </div>
+    </section>
+  </body>
+</html>

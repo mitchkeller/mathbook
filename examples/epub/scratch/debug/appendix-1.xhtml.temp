@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+<!--**************************************-->
+<!--*    Generated from PreTeXt source   *-->
+<!--*    on 2019-07-22T09:29:39-05:00    *-->
+<!--*                                    *-->
+<!--*      https://pretextbook.org       *-->
+<!--*                                    *-->
+<!--**************************************-->
+<link href="../css/pretext-epub.css" rel="stylesheet" type="text/css"/></head>
+  <body>
+    <div class="hidden-content" style="display:none">\(\newcommand{\doubler}[1]{2#1}
+\newcommand{\lt}{&lt;}
+\newcommand{\gt}{&gt;}
+\newcommand{\amp}{&amp;}
+\)</div>
+    <section class="appendix" id="appendix-1">
+      <h2 class="heading hide-type"><span class="type">Appendix</span> <span class="codenumber">A</span> <span class="title">Maybe the license</span></h2>
+      <p id="p-19">Lots of books written in  include the terms of their license in an appendix, so let's use this as a test.</p>
+    </section>
+  </body>
+</html>

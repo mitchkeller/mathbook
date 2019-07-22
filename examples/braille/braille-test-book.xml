@@ -73,7 +73,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>A Section Heading</title>
 
                 <introduction>
-                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.   The heading of this subsection begins in cell-5, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a centered heading.</p>
 
                     <p>Sections, subsections, and subsubsections (which all follow) have a blank line prior, indentation of four spaces, then the word for the division (e.g. <q>subsection</q>) followed by a number.  Content begins on the next line, typically indented two spaces because a paragraph starts there.</p>
 
@@ -84,20 +84,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>A Subsection Heading</title>
 
                     <introduction>
-                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.  The heading of this subsection begins in cell-7, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a cell-5 heading.</p>
                     </introduction>
 
                     <subsubsection>
                         <title>A Subsubsection Heading</title>
 
-                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.</p>
+                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsection begins in cell-7.</p>
 
                         <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.</p>
 
                         <paragraphs>
                             <title>A Paragraphs Heading</title>
 
-                            <p>(2019-05-27:  Have not attempted to make the title in <q>run-in</q> style yet, but it should be do-able.)  The content of a lightweight, terminal, <q>pargraphs</q> division with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                            <p>The <q>paragraphs</q> element is a lightweight division, which we realize with a run-in title, as illustrated here.  BANA transcription guide has examples suggesting this not be indented.  Examples are also not clear if a blank line just prior would be necessary or useful.</p>
+                            <p>This second paragraph tests that it is correct, since the first is exceptional.  Removing the indentation of the first paragraph may require a new <c>liblouis</c> style.</p>
                         </paragraphs>
                     </subsubsection>
                 </subsection>
@@ -154,9 +155,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Environments, Blocks</title>
 
-            <p><pretext/> has many chunks of text with a heading and a number.  We can proably decide to do this in a way that makes sense for mathematics texts.  Theorems are more complicated, since they have associated proofs.  We will start simple with a defintion and an example, and iterate to more types and more complicated structures.</p>
+            <p><pretext/> has many chunks of text with a heading and a number.  I call them blocks, others call them environments.  They qualify as the <q>boxed material</q> of the BANA transcription guide.  Experiments here are the <pretext/> <q>definition</q> and <q>example</q>.  Theorems are more complicated, since they have associated proofs.  We will start simple and iterate to more types and more complicated structures.</p>
 
-            <p>The <q>box lines</q> are configured and provided by liblouis.  I have intentionally used a different character for the top line versus the bottom line.  These characters can change, and if you suggested dot patterns I may be able to configure those choices.  The blank line before each seems to be non-negotiable.  Of course, we do not need to have either line at all<mdash/>the start is obvious from the heading.  But the conclusion needs some sort of device to not have it run into <q>regular</q> text following.</p>
+            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  So this is a place where I need to find out what actual dot patterns are being embossed for the top line and bottom line of the two blocks below.  (Note: the <c>liblouis</c> configuration for NIMAS uses seven and lower-g, but the latter produces special characters in the BRF, <c>x1b</c>, which could be correct.)</p>
+
+            <p>To get a blank line after the bottom line of the box, I had to use an un-documented style parameter.  The blank line after the content, and before the bottom line, strikes me as a bug.  No combination of parameters is making it go away.</p>
 
             <definition>
                 <title>Right Triangle</title>
@@ -182,7 +185,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Lists</title>
 
-            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.</p>
+            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.  I cannot see a way to use <c>liblouis</c> styling to insert a blank line before and after a list, HTML empty <c>p</c> and <c>br</c> elements are not effective.</p>
 
             <p>A super-simple ordered list, which <pretext/> requires to be authored inside a paragraph.<ol>
                 <li>Create a perpendicular bisector.</li>
@@ -190,20 +193,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>Create a circle of radius <m>b</m> centered at <m>a</m>.</li>
             </ol>And this sentence finishes the paragraph holding the ordered list.</p>
 
-            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  I have used an asterisk as the marker for the start of each list item.  Perhaps it is not necessary (given indentation?) or you may want to suggest a different character (via a dot pattern?).<ul>
+            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  This defaults to a symbol known as a bullet or disc, which BANA transcription guide says is dot pattern 456-256.<ul>
                 <li>Copy lengths.</li>
                 <li>Bisect segments.</li>
                 <li>Create arcs.</li>
             </ul>And this sentence finishes the paragraph holding the unordered list.</p>
 
-            <p>TODO: list items structured with paragraphs, nested lists, description lists.</p>
+            <p>Two more unordered lists in this paragraph.  To make legitimate HTML, <pretext/> explodes the paragraph into three, we need to use styles to mark the lead paragraph for indentation, and mark the later ones to not have indentation.  This seems unavoidable as one step of the pipeline is doing this breakup anyway.  An unordered list with a circle as a marker (not a <em>filled</em> circle), BANA says a Grade 1 indicator first, so dot pattern 56-1246-123456:<ul label="circle">
+                <li>One with a circle</li>
+                <li>Two with a circle</li>
+                <li>Three with a circle</li>
+            </ul>Now with a solid (filled) square.  BANA says dot pattern 456-1246-3456-145:<ul label="square">
+                <li>One with a square</li>
+                <li>Two with a square</li>
+                <li>Three with a square</li>
+            </ul>This concludes the paragraph, which will be an apparent third paragraph.</p>
+
+            <p>A <pretext/> description list has a single word, or simple phrase, which then has a definition or an explanation, which may be several paragraphs.  Following the BANA transcription guide, we build the description list like a list of the terms, each with a nested one-item list within containing the descriptive text.<dl>
+                <li>
+                    <title>First Item</title>
+                    <p>This text is a description of the first item, what BANA calls an <q>annotated list</q>.  It appears to be indented too far, since it is a paragraph, which <c>liblouis</c> is styling with an indent.</p>
+                </li>
+                <li>
+                    <title>Second Item</title>
+                    <p>Describes second item.  So we need a <c>liblouis</c> style for an unindented paragraph.</p>
+                </li>
+                <li>
+                    <title>Third Item</title>
+                    <p>Describes third item.  The descriptions should probably work exactly opposite, with runover text indented.</p>
+                </li>
+            </dl></p>
+
+            <p>TODO: list items structured with paragraphs, nested lists.</p>
 
         </chapter>
 
         <chapter>
             <title>Tables</title>
 
-            <p>A table of names of colors, with a title (a coming change in <pretext/>), with two rows and three columns.  Note: the title is not being displayed yet.</p>
+            <p>A table of names of colors, with a title, with two rows and three columns.  Note: the title is not being displayed yet.</p>
 
             <table>
                 <title>Some Colors</title>

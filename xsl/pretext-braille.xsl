@@ -200,6 +200,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
+<!-- A "paragraphs" element is a lightweignt division, which we  -->
+<!-- usually realize with a run-in title.  We need to force this -->
+<!-- for the HTML output, rather than letting CSS accomplish it. -->
+
+<!-- First, kill the independent heading/title element. -->
+<xsl:template match="paragraphs" mode="heading-title-paragraphs"/>
+
+<!-- Slide in the title, which includes punctuation -->
+<xsl:template match="paragraphs/p[1]" mode="body">
+    <p>
+        <xsl:apply-templates select="parent::paragraphs" mode="title-full"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+    </p>
+</xsl:template>
+
 
 <!-- Environments-->
 
@@ -379,15 +395,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraphs -->
 <!-- ########## -->
 
-<!-- We do not worry about lists, display math, or code -->
-<!-- displays which PreTeXt requires inside paragraphs. -->
-<!-- Following will create non-validating HTML, but     -->
-<!-- hopefully our tools will not care.                 -->
-<xsl:template match="p" mode="body">
-    <p>
-        <xsl:apply-templates/>
-    </p>
-</xsl:template>
+<!-- We do not worry about lists, display math, or code  -->
+<!-- displays which PreTeXt requires inside paragraphs.  -->
+<!-- Especially since the pipeline corrects this anyway. -->
+<!-- NB: see p[1] modified in "paragraphs" elsewhere     -->
 
 <!-- ########## -->
 <!-- Quotations -->
@@ -410,6 +421,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- here.  Template will help locate for subsequent work.       -->
 <!-- <xsl:template match="ol/li|ul/li|var/li" mode="body">       -->
 
+<xsl:template match="ol|ul|dl">
+    <xsl:copy>
+        <xsl:attribute name="class">
+            <xsl:text>outerlist</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="li"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="ol/li" mode="body">
     <li>
         <xsl:apply-templates select="." mode="item-number"/>
@@ -419,9 +439,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul/li" mode="body">
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="parent::ul" mode="format-code"/>
+    </xsl:variable>
     <li>
-        <xsl:text>* </xsl:text>
+        <!-- the list label.  Unicode values are not critical, they are  -->
+        <!-- just signals for the liblouis translation into dot-patterns -->
+        <xsl:choose>
+            <!-- Unicode Character 'BULLET' (U+2022) -->
+            <xsl:when test="$format-code = 'disc'">
+                <xsl:text>&#x2022; </xsl:text>
+            </xsl:when>
+            <!-- Unicode Character 'WHITE CIRCLE' (U+25CB) -->
+            <xsl:when test="$format-code = 'circle'">
+                <xsl:text>&#x25cb; </xsl:text>
+            </xsl:when>
+            <!-- Unicode Character 'BLACK SQUARE' (U+25A0) -->
+            <xsl:when test="$format-code = 'square'">
+                <xsl:text>&#x25a0; </xsl:text>
+            </xsl:when>
+            <!-- a bad idea for Braille -->
+            <xsl:when test="$format-code = 'none'">
+                <xsl:text/>
+            </xsl:when>
+        </xsl:choose>
+        <!-- and the contents -->
         <xsl:apply-templates/>
+    </li>
+</xsl:template>
+
+<xsl:template match="dl">
+    <dl class="outerlist">
+        <xsl:apply-templates select="li"/>
+    </dl>
+</xsl:template>
+
+<xsl:template match="dl/li">
+    <li>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <ul>
+            <li>
+                <xsl:apply-templates/>
+            </li>
+        </ul>
     </li>
 </xsl:template>
 

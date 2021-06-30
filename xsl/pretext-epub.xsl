@@ -980,6 +980,15 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
+	<!-- Kindle needs @style on the span containing math -->
+	<!-- So we copy that attribute up here, but only for Kindle -->
+	<xsl:choose>
+	  <xsl:when test="$b-kindle">
+	    <xsl:attribute name="style">
+	      <xsl:value-of select="$math/div[@class = 'mathml']/math:math/@style" />
+	    </xsl:attribute>
+	  </xsl:when>
+	</xsl:choose>
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">

@@ -1368,6 +1368,23 @@ def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
     mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
+    # We need the @style from the SVG to correct vertical-align on
+    # MathML in Kindle, so we also process to SVG math representations
+    if (math_format == 'kindle'):
+        math_representations_svg = os.path.join(tmp_dir, 'math-representations-svg.xml')
+        math_representations_kindle_valign = os.path.join(tmp_dir, 'math-representations-kindle-valign.xml')
+        msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
+        _debug(msg.format(xml_source, 'SVG', math_representations_svg))
+        mathjax_latex(xml_source, pub_file, math_representations_svg, None, 'svg')
+
+        valign_xslt = os.path.join(get_ptx_xsl_path(), 'support/copy-valign.xsl')
+        params = {}
+        params['svgfile'] = math_representations_svg
+        msg = 'copying @style (for vertical-align) from {} to MathML in {} and placing into {}'
+        _debug(msg.format(math_representations_svg, math_representations, math_representations_kindle_valign))
+        xsltproc(valign_xslt, math_representations, math_representations_kindle_valign, tmp_dir, params)
+        os.rename(math_representations,'{}.bak'.format(math_representations))
+        os.rename(math_representations_kindle_valign,math_representations)
 
     # Build necessary content and infrastructure EPUB files,
     # using SVG images of math.  Most output goes into the

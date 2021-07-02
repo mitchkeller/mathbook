@@ -124,7 +124,7 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;creating an EPUB requires the pretext/pretext script.</xsl:with-param>
     </xsl:call-template>
     <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
@@ -178,9 +178,14 @@
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:if test="$b-kindle">
-                  <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		</xsl:if>
+		<xsl:choose>
+		  <xsl:when test="$b-kindle">
+                    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:when>
+		  <xsl:otherwise>
+                    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:otherwise>
+		</xsl:choose>
             </head>
             <!-- use class to repurpose HTML CSS work -->
             <body class="pretext-content epub">
@@ -338,9 +343,14 @@
         <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
         <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
         <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
-	<xsl:if test="$b-kindle">
-          <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
-	</xsl:if>
+	<xsl:choose>
+	  <xsl:when test="$b-kindle">
+            <item id="css-kindle" href="{$css-dir}/kindle.css"            media-type="text/css"/>
+	  </xsl:when>
+	  <xsl:otherwise>
+            <item id="css-epub" href="{$css-dir}/epub.css"            media-type="text/css"/>
+	  </xsl:otherwise>
+	</xsl:choose>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/{$cover-filename}" properties="cover-image" media-type="image/png"/>
@@ -584,9 +594,14 @@ width: 100%
                 <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
-		<xsl:if test="$b-kindle">
-		  <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		</xsl:if>
+		<xsl:choose>
+		  <xsl:when test="$b-kindle">
+		    <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:when>
+		  <xsl:otherwise>
+		    <link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		  </xsl:otherwise>
+		</xsl:choose>
             </head>
             <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -944,9 +959,14 @@ width: 100%
                     <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
                     <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                     <xsl:call-template name="mathjax-css"/>
-		    <xsl:if test="$b-kindle">
-		      <link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
-		    </xsl:if>
+		    <xsl:choose>
+		      <xsl:when test="$b-kindle">
+			<link href="../{$css-dir}/kindle.css"            rel="stylesheet" type="text/css"/>
+		      </xsl:when>
+		      <xsl:otherwise>
+			<link href="../{$css-dir}/epub.css"            rel="stylesheet" type="text/css"/>
+		      </xsl:otherwise>
+		    </xsl:choose>
                 </head>
                 <!-- use class to repurpose HTML CSS work -->
                 <body class="pretext-content epub">

@@ -111,7 +111,7 @@
 <xsl:variable name="b-kindle" select="$math.format = 'kindle'"/>
 
 <!-- If there are footnotes, we'll build and package a "endnotes.xhtml" file -->
-<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside)"/>
+<xsl:variable name="b-has-endnotes" select="boolean($document-root//fn|$document-root//aside|$document-root//hint)"/>
 
 
 <!-- ############## -->
@@ -642,12 +642,12 @@ width: 100%
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
-        <pre>
+        <pre class="code input">
             <xsl:value-of select="$in" />
         </pre>
     </xsl:if>
     <xsl:if test="$out!=''">
-        <pre>
+        <pre class="code output">
             <xsl:value-of select="$out" />
         </pre>
     </xsl:if>
@@ -839,14 +839,37 @@ width: 100%
     </xsl:variable>
     <p>
         <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
-            <xsl:text>Aside: </xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
+	  <xsl:apply-templates select="." mode="heading-simple" />
         </a>
     </p>
 </xsl:template>
 
 <!-- The content, unwrapped from HTML infrastructure -->
 <xsl:template match="aside" mode="endnote-content">
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
+    </xsl:variable>
+    <aside epub:type="footnote" id="{$hid}">
+        <!-- mode="body" gets too much CSS -->
+        <xsl:apply-templates select="." mode="wrapped-content"/>
+    </aside>
+</xsl:template>
+
+<!-- Hints -->
+<!-- Use the EPUB aside mechanism for this. -->
+<xsl:template match="hint">
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
+    </xsl:variable>
+    <p>
+        <a class="url" epub:type="noteref" href="{$endnote-file}#{$hid}">
+	  <xsl:apply-templates select="." mode="heading-simple" />
+        </a>
+    </p>
+</xsl:template>
+
+<!-- The content, unwrapped from HTML infrastructure -->
+<xsl:template match="hint" mode="endnote-content">
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
@@ -932,7 +955,7 @@ width: 100%
                 <body class="pretext-content epub">
                     <h4>Endnotes</h4>
                     <!-- structure according to footnote level -->
-                    <xsl:apply-templates select="$document-root//fn|$document-root//aside" mode="endnote-content"/>
+                    <xsl:apply-templates select="$document-root//fn|$document-root//aside|$document-root//hint" mode="endnote-content"/>
                 </body>
             </html>
         </exsl:document>

@@ -1725,7 +1725,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//notation|$document-root//list-of">
+    <!-- Lists are built as "longtable" so they span multiple pages    -->
+    <!-- and get "continuation" footers, for example.  It is the       -->
+    <!-- "list generator" element which provokes the package inclusion -->
+    <xsl:if test="$document-root//notation-list|$document-root//list-of">
         <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
@@ -4516,11 +4519,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="notation" mode="backmatter">
-    <xsl:text>\(</xsl:text>
-    <!-- "usage" should be raw latex, so -->
-    <!-- should avoid text processing    -->
-    <xsl:value-of select="usage" />
-    <xsl:text>\)</xsl:text>
+    <!-- Process *exactly* one "m" element -->
+    <xsl:apply-templates select="usage/m[1]"/>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>

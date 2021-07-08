@@ -76,8 +76,9 @@
 </xsl:variable>
 <xsl:variable name="mock-UUID">mock-123456789-0-987654321</xsl:variable>
 
-<!-- We hard-code the chunking level.  Level 2 is       -->
-<!-- the default for books, which we presume throughout -->
+<!-- We hard-code the chunking level.  Level 2 is the  -->
+<!-- default for books, which we presume throughout.   -->
+<!-- Specialized divisions, to the spine, assume this. -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
         <xsl:when test="$root/book/part">3</xsl:when>
@@ -98,6 +99,27 @@
 <!-- Also 'kindle' dictates MathML output, but is primarily -->
 <!-- responsible for integrating PNG images in place of SVG -->
 <xsl:param name="math.format"/>
+
+<!-- The  mathjax_latex()  routine in  pretext.py  is parameterized    -->
+<!-- by the format of the math being generated:                        -->
+<!--     'svg', 'mml', 'nemeth', 'speech', 'kindle'                    -->
+<!-- In turn, this dictates if clause-ending punctuation is absorbed   -->
+<!-- into the math or not:                                             -->
+<!--     'svg', 'mml', 'kindle' -> absorbed into display math only     -->
+<!--     'nemeth', 'speech'     -> never absorbed                      -->
+<!-- For this stylesheet, which consumes this math, we need to set     -->
+<!-- the matching behavior for the adjacent text nodes via an override -->
+<!-- of the global  math.punctuation.include  variable.                -->
+<xsl:variable name="math.punctuation.include">
+    <xsl:choose>
+        <xsl:when test="($math.format = 'svg') or ($math.format = 'mml') or ($math.format = 'kindle')">
+            <xsl:text>display</xsl:text>
+        </xsl:when>
+        <xsl:when test="($math.format = 'speech')">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- Cover image filename, once -->
 <xsl:variable name="cover-filename">
@@ -168,7 +190,7 @@
     <!-- Any XML declaration seems to get scrubbed by the MathJax processing   -->
     <!-- (converted to a comment), so we explicitly suppress it here, and in   -->
     <!-- other exsl:document uses.                                             -->
-    <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
+    <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html>
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
@@ -247,7 +269,7 @@
     <!-- Do not use "doctype-system" here                            -->
     <!-- Automatically writes XML header at version 1.0, no encoding -->
     <!-- Points to OPF metadata file (in two variables)              -->
-    <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="no">
+    <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="yes">
         <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
           <rootfiles>
             <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
@@ -265,7 +287,7 @@
     <!-- Must be XML, UTF-8/16            -->
     <!-- Required on package: version, id -->
     <!-- Trying with no encoding, Gitden rejects? -->
-    <exsl:document href="{$content-dir}/{$package-file}" method="xml" omit-xml-declaration="yes" indent="no">
+    <exsl:document href="{$content-dir}/{$package-file}" method="xml" omit-xml-declaration="yes" indent="yes">
         <package xmlns="http://www.idpf.org/2007/opf"
                  unique-identifier="{$uid-string}" version="3.0">
             <xsl:call-template name="package-metadata" />
@@ -395,6 +417,7 @@
         <!-- properties are iff, so validator complains if extra -->
         <!-- condition on math presence for svg/mathml property  -->
         <!-- TODO: use a parameter switch for output style       -->
+        <!-- Study: https://github.com/w3c/epubcheck/issues/420  -->
         <!-- Processing with page2svg makes it appear SVG images exist -->
         <!-- <xsl:if test=".//m or .//me or .//men or .//md or .//mdn"> -->
              <xsl:attribute name="properties">
@@ -434,7 +457,10 @@
 </xsl:template>
 
 <!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
+<!-- Specialized divisions will only become files in the manifest at     -->
+<!-- chunk level 2, in other words, peers of chapters or sections        -->
+<!-- (book or chapter/appendix as parent, respectively)                  -->
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises[parent::book|parent::chapter|parent::appendix]|reading-questions[parent::book|parent::chapter|parent::appendix]|references[parent::book|parent::chapter|parent::appendix]|solutions[parent::book|parent::chapter|parent::appendix]|glossary[parent::book|parent::chapter|parent::appendix]" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
@@ -566,7 +592,7 @@ width: 100%
 <!-- ############# -->
 
 <xsl:template match="frontmatter" mode="epub">
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html>
             <!-- head element should not be empty -->
             <head>
@@ -585,7 +611,7 @@ width: 100%
             </body>
         </html>
     </exsl:document>
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
@@ -949,7 +975,7 @@ width: 100%
     <!-- No footnotes or asides, don't bother -->
     <xsl:if test="$b-has-endnotes">
         <!-- cribbed from "file-wrap" elsewhere -->
-        <exsl:document href="{$content-dir}/{$xhtml-dir}/{$endnote-file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no">
+        <exsl:document href="{$content-dir}/{$xhtml-dir}/{$endnote-file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
             <html>
                 <head>
                     <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
